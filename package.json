@@ -1,0 +1,23 @@
+{
+  "name": "dapplet-registry",
+  "version": "0.1.0",
+  "description": "Test Dapplet Registry",
+  "main": "index.js",
+  "scripts": {
+    "start": "echo \"Error: no start specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dapplets/dapplet-registry.git"
+  },
+  "keywords": [
+    "dapplets",
+    "registry"
+  ],
+  "author": "Dapplets Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dapplets/dapplet-registry/issues"
+  },
+  "homepage": "https://github.com/dapplets/dapplet-registry#readme"
+}
