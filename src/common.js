@@ -2,20 +2,23 @@ const fs = require('fs');
 const { DATA_PATH } = require('./constants'); 
 
 const checkAccountKey = (name, key) => new Promise((resolve, reject) => {
-    if (!name || !key) resolve(false);
-    
-    fs.readFile(`${DATA_PATH}/accounts.json`, 'utf8', (err, data) => {
-        if (err) {
-            resolve(false);
-        }
+    if (!name || !key) return resolve(false);
 
-        const accounts = JSON.parse(data);
-        if (!!accounts.find(f => f.name === name && f.key === key)) {
-            resolve(true);
-        } else {
-            resolve(false);
-        }
-    });
+    if (!fs.existsSync(`${DATA_PATH}/${name}`)) {
+        return resolve(false);
+    }
+
+    const existingKey = fs.readFileSync(`${DATA_PATH}/${name}/secret.key`, 'utf8');
+    if (existingKey === key) {
+        return resolve(true);
+    } else {
+        return resolve(false);
+    }
 });
 
-module.exports = { checkAccountKey };
+const getDirectories = source =>
+  fs.readdirSync(source, { withFileTypes: true })
+    .filter(dirent => dirent.isDirectory())
+    .map(dirent => dirent.name)
+
+module.exports = { checkAccountKey, getDirectories };

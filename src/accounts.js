@@ -2,61 +2,38 @@ const router = require('express').Router();
 const fs = require('fs');
 const crypto = require('crypto');
 const { DATA_PATH } = require('./constants');
-const { checkAccountKey } = require('./common');
+const { checkAccountKey, getDirectories } = require('./common');
+var rimraf = require("rimraf");
 
 // all accounts
 router.get('/', function (req, res) {
-    fs.readFile(`${DATA_PATH}/accounts.json`, 'utf8', (err, data) => {
-        if (err) {
-            res.json({ success: true, data: [] });
-        } else {
-            const accounts = JSON.parse(data);
-            const result = accounts.map(a => ({
-                name: a.name
-            }));
-
-            res.json({ success: true, data: result });
-        }
-    });
+    const accountNames = getDirectories(DATA_PATH);
+    res.json({ success: true, data: accountNames.map(n => ({ name: n })) });
 });
 
 // create new account
-router.post('/', function (req, res) {
-    const { name } = req.body;
-    if (!name) {
+router.post('/:name', function (req, res) {
+    const { name } = req.params;
+
+    if (fs.existsSync(`${DATA_PATH}/${name}`)) {
         res.status(400);
-        return res.json({ success: false, message: "An account name is not specified." });
+        return res.json({ success: false, message: "An account with the same name already exists." });
     }
 
-    fs.readFile(`${DATA_PATH}/accounts.json`, 'utf8', (err, data) => {
-        let accounts = [];
-        if (!err) {
-            accounts = JSON.parse(data);
-        }
+    const key = crypto.randomBytes(64).toString('hex');
 
-        if (!!accounts.find(f => f.name === name)) {
+    fs.mkdirSync(`${DATA_PATH}/${name}`);
+
+    fs.writeFile(`${DATA_PATH}/${name}/secret.key`, key, 'utf8', (err) => {
+        if (err) {
             res.status(400);
-            return res.json({ success: false, message: "An account with the same name already exists." });
+            return res.json({ success: false, message: "An error has occured." });
         }
 
-        const newAccount = {
-            name: name,
-            key: crypto.randomBytes(64).toString('hex')
-        };
-
-        accounts.push(newAccount);
-
-        fs.writeFile(`${DATA_PATH}/accounts.json`, JSON.stringify(accounts), 'utf8', (err) => {
-            if (err) {
-                res.status(400);
-                return res.json({ success: false, message: "An error has occured." });
-            }
-
-            return res.json({ 
-                success: true, 
-                message: "The account was created successfully.", 
-                data: newAccount 
-            });
+        return res.json({ 
+            success: true, 
+            message: "The account was created successfully.", 
+            data: { name, key }
         });
     });
 });
@@ -71,31 +48,11 @@ router.delete('/:name', async function (req, res) {
         return res.json({ success: false, message: "Invalid account key." });
     }
 
-    fs.readFile(`${DATA_PATH}/accounts.json`, 'utf8', (err, data) => {
-        if (err) {
-            return res.json({ success: true, message: "An account with the same name doesn't exist." });
-        }
+    rimraf.sync(`${DATA_PATH}/${name}`);
 
-        let accounts = JSON.parse(data);
-        if (!accounts.find(f => f.name === name)) {
-            return res.json({ success: true, message: "An account with the same name doesn't exist." });
-        }
-
-        accounts = accounts.filter(f => f.name !== name);
-
-        fs.writeFile(`${DATA_PATH}/accounts.json`, JSON.stringify(accounts), 'utf8', (err) => {
-            if (err) {
-                res.status(400);
-                return res.json({ success: false, message: "An error has occured." });
-            }
-
-            // ToDo: delete all modules, related with the account 
-
-            return res.json({ 
-                success: true, 
-                message: "The account was deleted successfully."
-            });
-        });
+    return res.json({ 
+        success: true, 
+        message: "The account was deleted successfully."
     });
 })
 
