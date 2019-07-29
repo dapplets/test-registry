@@ -4,6 +4,19 @@ var app = require("../src/app");
 
 describe("Unit test", function () {
 
+  it("should return homepage", function (done) {
+    // calling home page api
+    request(app)
+      .get("/")
+      .expect("Content-type", /json/)
+      .expect(200)
+      .end(function (err, res) {
+        res.status.should.equal(200);
+        res.body.success.should.equal(true);
+        done();
+      });
+  });
+
   const getPaths = [
     "/api/modules",
     "/api/modules/dapplets-team",
