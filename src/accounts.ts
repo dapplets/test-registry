@@ -8,7 +8,7 @@ import rimraf from "rimraf";
 const router = express.Router();
 
 // all accounts
-router.get('/', function (req, res) {
+router.get('/', async function (req, res) {
     const accountNames = getDirectories(DATA_PATH);
     res.json({ success: true, data: accountNames.map(n => ({ name: n })) });
 });

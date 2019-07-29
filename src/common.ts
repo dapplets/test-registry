@@ -16,9 +16,11 @@ const checkAccountKey = (name: string, key: string) => new Promise((resolve, rej
     }
 });
 
-const getDirectories = (source: string) =>
-  fs.readdirSync(source, { withFileTypes: true })
-    .filter(dirent => dirent.isDirectory())
-    .map(dirent => dirent.name)
+const getDirectories = (source: string): string[] => fs.readdirSync(source, {
+    withFileTypes: true
+}).reduce((a: any, c) => {
+    c.isDirectory() && a.push(c.name)
+    return a;
+}, [])
 
 export { checkAccountKey, getDirectories };
