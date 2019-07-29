@@ -1,7 +1,11 @@
-var router = require('express').Router();
+import express from "express";
+import fs from "fs";
 
-// all modules and its branches
+const router = express.Router();
+
+// all modules
 router.get('/', function (req, res) {
+
     res.json({
         success: false,
         message: "Not implemented yet"
@@ -56,4 +60,4 @@ router.get('/:account/:name/:branch/:version/:file', function (req, res) {
     });
 });
 
-module.exports = router;
+export default router;

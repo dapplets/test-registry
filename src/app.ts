@@ -1,5 +1,7 @@
-var express = require("express");
-var bodyParser = require("body-parser");
+import express from "express";
+import bodyParser from "body-parser";
+import modules from "./modules";
+import accounts from "./accounts";
 
 var app = express();
 app.use(bodyParser.urlencoded());
@@ -7,17 +9,17 @@ app.use(bodyParser.json());
 
 var router = express.Router();
 
-router.use('/modules', require('./modules')); 
-router.use('/accounts', require('./accounts')); 
+router.use('/modules', modules); 
+router.use('/accounts', accounts); 
 
 app.use('/api', router);
 
 // main page
-app.get('/', function (req, res) {
+app.get('/', function (req: any, res: any) {
     res.json({
         success: true,
         message: "Hello! I'm Test Dapplet Registry. More information is here: https://github.com/dapplets/dapplet-registry"
     });
 }); 
 
-module.exports = app;
+export { app }

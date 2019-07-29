@@ -1,7 +1,7 @@
-const fs = require('fs');
-const { DATA_PATH } = require('./constants'); 
+import fs from "fs";
+import { DATA_PATH } from "./constants";
 
-const checkAccountKey = (name, key) => new Promise((resolve, reject) => {
+const checkAccountKey = (name: string, key: string) => new Promise((resolve, reject) => {
     if (!name || !key) return resolve(false);
 
     if (!fs.existsSync(`${DATA_PATH}/${name}`)) {
@@ -16,9 +16,9 @@ const checkAccountKey = (name, key) => new Promise((resolve, reject) => {
     }
 });
 
-const getDirectories = source =>
+const getDirectories = (source: string) =>
   fs.readdirSync(source, { withFileTypes: true })
     .filter(dirent => dirent.isDirectory())
     .map(dirent => dirent.name)
 
-module.exports = { checkAccountKey, getDirectories };
+export { checkAccountKey, getDirectories };

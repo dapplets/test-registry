@@ -1,9 +1,11 @@
-const router = require('express').Router();
-const fs = require('fs');
-const crypto = require('crypto');
-const { DATA_PATH } = require('./constants');
-const { checkAccountKey, getDirectories } = require('./common');
-var rimraf = require("rimraf");
+import express from "express";
+import fs from "fs";
+import crypto from "crypto";
+import { DATA_PATH } from "./constants";
+import { checkAccountKey, getDirectories } from "./common";
+import rimraf from "rimraf";
+
+const router = express.Router();
 
 // all accounts
 router.get('/', function (req, res) {
@@ -56,4 +58,4 @@ router.delete('/:name', async function (req, res) {
     });
 })
 
-module.exports = router;
+export default router;
