@@ -2,6 +2,12 @@ import express from "express";
 import bodyParser from "body-parser";
 import modules from "./modules";
 import accounts from "./accounts";
+import fs from "fs";
+import { DATA_PATH } from "./constants";
+
+if (!fs.existsSync(DATA_PATH)) {
+    fs.mkdirSync(DATA_PATH);
+}
 
 var app = express();
 app.use(bodyParser.urlencoded());
