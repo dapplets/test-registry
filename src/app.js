@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 var router = express.Router();
 
 router.use('/modules', require('./modules')); 
-router.use('/users', require('./users')); 
+router.use('/accounts', require('./accounts')); 
 
 app.use('/api', router);
 
