@@ -2,9 +2,10 @@
   "name": "dapplet-registry",
   "version": "0.1.0",
   "description": "Test Dapplet Registry",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node src/index.js",
+    "test": "mocha test/index.js"
   },
   "repository": {
     "type": "git",
@@ -22,5 +23,10 @@
   "homepage": "https://github.com/dapplets/dapplet-registry#readme",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "mocha": "^6.2.0",
+    "should": "^13.2.3",
+    "supertest": "^4.0.2"
   }
 }
