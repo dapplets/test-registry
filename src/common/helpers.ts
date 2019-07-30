@@ -1,5 +1,4 @@
 import fs from "fs";
-import { DATA_PATH } from "./constants";
 
 export const getDirectories = (source: string): string[] => fs.readdirSync(source, {
     withFileTypes: true

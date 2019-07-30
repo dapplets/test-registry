@@ -2,6 +2,7 @@ import { DATA_ACCOUNTS_PATH } from "../common/constants";
 import fs from "fs";
 import crypto from "crypto";
 import { AuthError } from "../common/errors";
+import { AccountConfig } from "../common/types";
 
 export class AccountService {
     public getList() : string[] {
@@ -17,7 +18,7 @@ export class AccountService {
     
         const key = crypto.randomBytes(64).toString('hex');
 
-        const config = {
+        const config: AccountConfig = {
             secret: key,
             modules: {},
             hostnames: {}
@@ -37,7 +38,7 @@ export class AccountService {
     }
 
     public async delete(name: string, key: string) {
-        const isValidKey = await this.checkKey(name, key);
+        const isValidKey = this.checkKey(name, key);
         if (!isValidKey) {
             throw new AuthError();
         }
@@ -48,21 +49,25 @@ export class AccountService {
         );
     }
 
-    public async checkKey(name: string, key: string) : Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            if (!name || !key) return resolve(false);
+    public checkKey(name: string, key: string) : boolean {
+        if (!name || !key) return false;
+        const config = this.getConfig(name);
         
-            if (!fs.existsSync(`${DATA_ACCOUNTS_PATH}/${name}.json`)) {
-                return resolve(false);
-            }
-        
-            const configJson = fs.readFileSync(`${DATA_ACCOUNTS_PATH}/${name}.json`, 'utf8');
-            const config = JSON.parse(configJson);
-            if (config && config.secret && config.secret === key) {
-                return resolve(true);
-            } else {
-                return resolve(false);
-            }
-        });
+        if (config && config.secret && config.secret === key) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public getConfig(account: string): AccountConfig {
+        const configPath = DATA_ACCOUNTS_PATH + '/' + account + '.json';
+        if (!fs.existsSync(configPath)) {
+            throw new Error("The account doesn't exist.")
+        }
+
+        const json = fs.readFileSync(configPath, 'utf8');
+        const config: AccountConfig = JSON.parse(json);
+        return config;
     }
 }
