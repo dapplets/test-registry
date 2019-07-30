@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import homeController from "./controllers/homeController";
 import accountController from "./controllers/accountController";
-import moduleController from "./controllers/moduleController";
+import registryController from "./controllers/registryController";
 import storageController from "./controllers/storageController";
 import fs from "fs";
 import { DATA_PATH } from "./common/constants";
@@ -24,8 +24,8 @@ app.use(bodyParser.json());
 var router = express.Router();
 
 router.use('/accounts', accountController);
-router.use('/modules', moduleController);
 router.use('/storage', storageController);
+router.use('/registry', registryController);
 
 app.use('/api', router);
 app.use('/', homeController);

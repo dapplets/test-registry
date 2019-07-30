@@ -3,15 +3,6 @@ import fs from "fs";
 
 const router = express.Router();
 
-// all modules
-router.get('/', function (req, res) {
-
-    res.json({
-        success: false,
-        message: "Not implemented yet"
-    });
-});
-
 // all modules by specific account
 router.get('/:account', function (req, res) {
     res.json({
