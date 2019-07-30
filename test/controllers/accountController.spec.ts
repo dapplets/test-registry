@@ -1,13 +1,16 @@
 import chai from "chai";
 import chaiHttp from "chai-http";
 import "mocha";
-import rimraf from "rimraf";
 import { app } from "../../src/app";
-import { DATA_PATH } from "../../src/common/constants";
+import { DATA_ACCOUNTS_PATH } from "../../src/common/constants";
+import fs from "fs";
 
 const ACCOUNT_NAME = "unit-testing-account";
+const DATA_TEST_ACCOUNT_PATH = DATA_ACCOUNTS_PATH + '/' + ACCOUNT_NAME + '.json';
 
-rimraf.sync(`${DATA_PATH}/${ACCOUNT_NAME}`);
+if (fs.existsSync(DATA_TEST_ACCOUNT_PATH)) {
+    fs.unlinkSync(DATA_TEST_ACCOUNT_PATH);
+}
 
 chai.use(chaiHttp);
 

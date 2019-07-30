@@ -1,13 +1,7 @@
 import chai from "chai";
 import chaiHttp from "chai-http";
 import "mocha";
-import rimraf from "rimraf";
 import { app } from "../../src/app";
-import { DATA_PATH } from "../../src/common/constants";
-
-const ACCOUNT_NAME = "unit-testing-account";
-
-rimraf.sync(`${DATA_PATH}/${ACCOUNT_NAME}`);
 
 chai.use(chaiHttp);
 
