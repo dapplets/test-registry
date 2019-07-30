@@ -31,7 +31,7 @@ describe("Registry Controller Unit Test", function () {
     });
 
     const postPaths = [
-        "/api/registry/dapplets-team/add-module",
+        "/api/registry/dapplets-team/add-module?uri=test",
         "/api/registry/dapplets-team/add-site-binding?name=twitter-adapter-1.dapplet-base.eth&branch=default&site=twitter.com",
         "/api/registry/dapplets-team/add-site-binding?name=twitter-adapter-1.dapplet-base.eth&site=twitter.com",
     ];
