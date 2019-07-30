@@ -1,7 +1,7 @@
 import express from "express";
-import { StorageService } from "../services/storageService";
+import { StorageService } from "../../services/storageService";
 import multer from "multer";
-import { asyncHandler } from "../common/helpers";
+import { asyncHandler } from "../../common/helpers";
 
 const upload = multer();
 

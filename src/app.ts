@@ -1,11 +1,8 @@
 import express from "express";
 import bodyParser from "body-parser";
-import homeController from "./controllers/homeController";
-import accountController from "./controllers/accountController";
-import registryController from "./controllers/registryController";
-import storageController from "./controllers/storageController";
 import fs from "fs";
 import { DATA_PATH } from "./common/constants";
+import routes from "./routes";
 
 if (!fs.existsSync(DATA_PATH)) {
     fs.mkdirSync(DATA_PATH);
@@ -21,14 +18,7 @@ var app = express();
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
-var router = express.Router();
-
-router.use('/accounts', accountController);
-router.use('/storage', storageController);
-router.use('/registry', registryController);
-
-app.use('/api', router);
-app.use('/', homeController);
+app.use('/', routes);
 
 app.use((err: any, req: any, res: any, next: any) => {
     const status = (err.name == "AuthError") ? 401 : 400;

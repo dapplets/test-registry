@@ -1,7 +1,7 @@
 import chai from "chai";
 import chaiHttp from "chai-http";
 import "mocha";
-import { app } from "../../src/app";
+import { app } from "../../../src/app";
 
 const ACCOUNT_NAME = "unit-testing-account";
 

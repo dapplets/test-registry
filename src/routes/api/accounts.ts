@@ -1,6 +1,6 @@
 import express from "express";
-import { AccountService } from "../services/accountService";
-import { asyncHandler } from "../common/helpers";
+import { AccountService } from "../../services/accountService";
+import { asyncHandler } from "../../common/helpers";
 
 const router = express.Router();
 const accountService = new AccountService();

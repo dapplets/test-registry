@@ -1,5 +1,5 @@
 import express from "express";
-import { asyncHandler } from "../common/helpers";
+import { asyncHandler } from "../../common/helpers";
 
 const router = express.Router();
 

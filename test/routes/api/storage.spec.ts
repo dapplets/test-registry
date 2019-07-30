@@ -1,8 +1,8 @@
 import chai from "chai";
 import chaiHttp from "chai-http";
 import "mocha";
-import { app } from "../../src/app";
-import { DATA_PATH } from "../../src/common/constants";
+import { app } from "../../../src/app";
+import { DATA_PATH } from "../../../src/common/constants";
 import fs from "fs";
 import crypto from "crypto";
 import bs58 from "bs58";
