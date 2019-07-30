@@ -38,7 +38,7 @@ describe("Account creation and deletion", function () {
                 chai.expect(res.body.success).to.eql(true);
                 chai.expect(res.body.data).instanceOf(Array);
 
-                chai.expect((!!res.body.data.find((f: any) => f.name === ACCOUNT_NAME))).to.eql(true);
+                chai.expect((!!res.body.data.find((f: any) => f === ACCOUNT_NAME))).to.eql(true);
                 done();
             });
     });

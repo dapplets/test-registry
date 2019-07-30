@@ -10,7 +10,7 @@ const router = express.Router();
 // all accounts
 router.get('/', async function (req, res) {
     const accountNames = getDirectories(DATA_PATH);
-    res.json({ success: true, data: accountNames.map(n => ({ name: n })) });
+    res.json({ success: true, data: accountNames });
 });
 
 // create new account
