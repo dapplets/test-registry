@@ -55,10 +55,6 @@ export class RegistryService {
             throw new Error("Invalid manifest.");
         }
 
-        if (!m.type || m.type !== "FEATURE") {
-            throw new Error("Can not .");
-        }
-
         if (!m.name || !m.branch || !m.version || !m.type || !m.dist || !m.icon || !m.title || !m.author || !m.description) {
             throw new Error("Not all required fields are filled in manifest.");
         }
