@@ -1,7 +1,8 @@
 import express from "express";
 import bodyParser from "body-parser";
-import modules from "./controllers/moduleController";
-import accounts from "./controllers/accountController";
+import homeController from "./controllers/homeController";
+import accountController from "./controllers/accountController";
+import moduleController from "./controllers/moduleController";
 import fs from "fs";
 import { DATA_PATH } from "./common/constants";
 
@@ -15,17 +16,10 @@ app.use(bodyParser.json());
 
 var router = express.Router();
 
-router.use('/modules', modules); 
-router.use('/accounts', accounts); 
+router.use('/accounts', accountController); 
+router.use('/modules', moduleController); 
 
 app.use('/api', router);
-
-// main page
-app.get('/', function (req: any, res: any) {
-    res.json({
-        success: true,
-        message: "Hello! I'm Test Dapplet Registry. More information is here: https://github.com/dapplets/dapplet-registry"
-    });
-}); 
+app.use('/', homeController); 
 
 export { app }

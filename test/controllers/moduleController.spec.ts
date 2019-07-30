@@ -11,17 +11,7 @@ rimraf.sync(`${DATA_PATH}/${ACCOUNT_NAME}`);
 
 chai.use(chaiHttp);
 
-describe("Modules Unit test", function () {
-
-    it("should return homepage", function (done) {
-        chai.request(app)
-            .get("/")
-            .then(res => {
-                chai.expect(res.status).to.eql(200);
-                chai.expect(res.body.success).to.eql(true);
-                done();
-            });
-    });
+describe("Module Controller Unit Test", function () {
 
     const getPaths = [
         "/api/modules",

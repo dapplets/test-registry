@@ -11,7 +11,7 @@ rimraf.sync(`${DATA_PATH}/${ACCOUNT_NAME}`);
 
 chai.use(chaiHttp);
 
-describe("Account creation and deletion", function () {
+describe("Account Controller Unit Test", function () {
     let key: string = "";
 
     it("should return new account with auth key", function (done) {
