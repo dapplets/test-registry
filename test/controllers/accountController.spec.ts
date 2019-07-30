@@ -28,7 +28,8 @@ describe("Account Controller Unit Test", function () {
                 chai.expect(res.body.data).haveOwnProperty('key');
                 key = res.body.data.key;
                 done();
-            });
+            })
+            .catch(done);
     });
 
     it("should return account list with created account", function (done) {
@@ -43,7 +44,8 @@ describe("Account Controller Unit Test", function () {
 
                 chai.expect((!!res.body.data.find((f: any) => f === ACCOUNT_NAME))).to.eql(true);
                 done();
-            });
+            })
+            .catch(done);
     });
 
     it("should return invalid key error", function (done) {
@@ -54,7 +56,8 @@ describe("Account Controller Unit Test", function () {
                 chai.expect(res.status).to.eql(401);
                 chai.expect(res.body.success).to.eql(false);
                 done();
-            });
+            })
+            .catch(done);
     });
 
     it("should return succesfull deletion", function (done) {
@@ -65,7 +68,8 @@ describe("Account Controller Unit Test", function () {
                 chai.expect(res.status).to.eql(200);
                 chai.expect(res.body.success).to.eql(true);
                 done();
-            });
+            })
+            .catch(done);
     });
 
 });

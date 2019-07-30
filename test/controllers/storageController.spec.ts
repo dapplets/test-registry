@@ -46,7 +46,8 @@ describe("Storage Controller Unit Test", function () {
                 chai.expect(res.body.success).to.eql(true);
                 chai.expect(res.body.data).to.eql(id);
                 done();
-            });
+            })
+            .catch(done);
     });
 
     it("should return created file by hash", function (done) {
@@ -61,7 +62,8 @@ describe("Storage Controller Unit Test", function () {
                 chai.expect(res.body).to.instanceOf(Buffer);
                 chai.expect(res.body).to.eql(buf);
                 done();
-            });
+            })
+            .catch(done);
     });
 
 });

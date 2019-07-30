@@ -14,6 +14,7 @@ describe("Home Controller Unit Test", function () {
                 chai.expect(res.status).to.eql(200);
                 chai.expect(res.body.success).to.eql(true);
                 done();
-            });
+            })
+            .catch(done);
     });
 });
