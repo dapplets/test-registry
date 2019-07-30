@@ -8,7 +8,6 @@ const upload = multer();
 const router = express.Router();
 const storageService = new StorageService();
 
-
 router.get('/:id', asyncHandler(async function (req, res) {
     const { id } = req.params;
     const buf = await storageService.get(id);
@@ -27,6 +26,5 @@ router.delete('/:id', asyncHandler(async function (req, res) {
     await storageService.delete(id);
     return res.json({ success: true });
 }));
-
 
 export default router;
