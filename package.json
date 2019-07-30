@@ -4,7 +4,9 @@
   "description": "Test Dapplet Registry",
   "main": "src/app.js",
   "scripts": {
-    "start": "tsc && node ./build/index.js",
+    "start": "node --inspect=5858 -r ts-node/register ./src/index.ts",
+    "start:watch": "nodemon",
+    "build": "tsc",
     "test": "mocha -r ts-node/register ./test/**/*.spec.ts"
   },
   "repository": {
@@ -36,6 +38,20 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "mocha": "^6.2.0",
+    "nodemon": "^1.19.1",
     "ts-node": "^8.3.0"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "**/*.test.ts",
+      "**/*.spec.ts",
+      ".git",
+      "node_modules"
+    ],
+    "watch": [
+      "src"
+    ],
+    "exec": "npm start",
+    "ext": "ts"
   }
 }
