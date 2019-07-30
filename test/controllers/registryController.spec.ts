@@ -12,6 +12,7 @@ describe("Registry Controller Unit Test", function () {
     const getPaths = [
         "/api/registry/dapplets-team/get-versions?name=twitter-feature-1.dapplet-base.eth",
         "/api/registry/dapplets-team/get-versions?name=twitter-feature-1.dapplet-base.eth&branch=default",
+        "/api/registry/dapplets-team/resolve-to-uri?name=twitter-feature-1.dapplet-base.eth&version=0.1.0",
         "/api/registry/dapplets-team/resolve-to-uri?name=twitter-feature-1.dapplet-base.eth&branch=default&version=0.1.0",
         "/api/registry/dapplets-team/get-features?hostname=twitter.com"
     ];
@@ -31,7 +32,8 @@ describe("Registry Controller Unit Test", function () {
 
     const postPaths = [
         "/api/registry/dapplets-team/add-module",
-        "/api/registry/dapplets-team/add-site-binding?name=twitter-adapter-1.dapplet-base.eth&branch=default&site=twitter.com"
+        "/api/registry/dapplets-team/add-site-binding?name=twitter-adapter-1.dapplet-base.eth&branch=default&site=twitter.com",
+        "/api/registry/dapplets-team/add-site-binding?name=twitter-adapter-1.dapplet-base.eth&site=twitter.com",
     ];
 
     postPaths.forEach(path => {
@@ -48,10 +50,12 @@ describe("Registry Controller Unit Test", function () {
     });
 
     const getErrorPaths = [
-        "/api/registry/dapplets-team/get-versions?name=twitter-feature-1.dapplet-base.eth",
-        "/api/registry/dapplets-team/get-versions?name=twitter-feature-1.dapplet-base.eth&branch=default",
-        "/api/registry/dapplets-team/resolve-to-uri?name=twitter-feature-1.dapplet-base.eth&branch=default&version=0.1.0",
-        "/api/registry/dapplets-team/get-features?hostname=twitter.com"
+        "/api/registry/dapplets-team/get-versions",
+        "/api/registry/dapplets-team/resolve-to-uri?name=twitter-feature-1.dapplet-base.eth",
+        "/api/registry/dapplets-team/resolve-to-uri?version=0.1.0",
+        "/api/registry/dapplets-team/resolve-to-uri?name=twitter-feature-1.dapplet-base.eth&branch=default",
+        "/api/registry/dapplets-team/resolve-to-uri?version=0.1.0&branch=default",
+        "/api/registry/dapplets-team/get-features"
     ];
 
     getErrorPaths.forEach(path => {
@@ -68,8 +72,9 @@ describe("Registry Controller Unit Test", function () {
     });
 
     const postErrorPaths = [
-        "/api/registry/dapplets-team/add-module?uri=hash",
-        "/api/registry/dapplets-team/add-site-binding?name=twitter-adapter-1.dapplet-base.eth&branch=default&site=twitter.com"
+        "/api/registry/dapplets-team/add-module",
+        "/api/registry/dapplets-team/add-site-binding?name=twitter-adapter-1.dapplet-base.eth",
+        "/api/registry/dapplets-team/add-site-binding?site=twitter.com"
     ];
 
     postErrorPaths.forEach(path => {
