@@ -30,4 +30,12 @@ router.use('/registry', registryController);
 app.use('/api', router);
 app.use('/', homeController);
 
+app.use((err: any, req: any, res: any, next: any) => {
+    const status = (err.name == "AuthError") ? 401 : 400;
+    res.status(status).json({
+        success: false,
+        message: err.message
+    });
+});
+
 export { app }
