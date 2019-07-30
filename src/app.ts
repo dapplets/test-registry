@@ -1,9 +1,9 @@
 import express from "express";
 import bodyParser from "body-parser";
-import modules from "./modules";
-import accounts from "./accounts";
+import modules from "./controllers/moduleController";
+import accounts from "./controllers/accountController";
 import fs from "fs";
-import { DATA_PATH } from "./constants";
+import { DATA_PATH } from "./common/constants";
 
 if (!fs.existsSync(DATA_PATH)) {
     fs.mkdirSync(DATA_PATH);

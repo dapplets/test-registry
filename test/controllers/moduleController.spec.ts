@@ -2,8 +2,8 @@ import chai from "chai";
 import chaiHttp from "chai-http";
 import "mocha";
 import rimraf from "rimraf";
-import { app } from "../src/app";
-import { DATA_PATH } from "../src/constants";
+import { app } from "../../src/app";
+import { DATA_PATH } from "../../src/common/constants";
 
 const ACCOUNT_NAME = "unit-testing-account";
 
@@ -27,9 +27,9 @@ describe("Modules Unit test", function () {
         "/api/modules",
         "/api/modules/dapplets-team",
         "/api/modules/dapplets-team/twitter-adapter.dapplets-base.eth",
-        "/api/modules/dapplets-team/twitter-adapter.dapplets-base.eth/default",
-        "/api/modules/dapplets-team/twitter-adapter.dapplets-base.eth/default/0.1.0",
-        "/api/modules/dapplets-team/twitter-adapter.dapplets-base.eth/default/0.1.0/index.js"
+        "/api/modules/dapplets-team/twitter-adapter.dapplets-base.eth/default", //
+        "/api/modules/dapplets-team/twitter-adapter.dapplets-base.eth/default/0.1.0", //
+        "/api/modules/dapplets-team/twitter-adapter.dapplets-base.eth/default/0.1.0/index.js" //
     ];
 
     getPaths.forEach(path => {
