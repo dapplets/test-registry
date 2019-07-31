@@ -4,8 +4,9 @@
         "module": "commonjs",
         "outDir": "./build",
         "strict": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "typeRoots": ["./node_modules/@types", "./typings"]
     },
-    "include": ["src/**/*", "test/accounts.spec.ts"],
+    "include": ["./src/**/*.ts", "./typings"],
     "exclude": ["node_modules", "**/*.spec.ts"]
 }
