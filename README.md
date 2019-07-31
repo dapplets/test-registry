@@ -4,6 +4,9 @@
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
+## Public Test Registry API
+[API Documentation is here](https://github.com/dapplets/test-registry/blob/master/docs/REGISTRY-API.md)
+
 ### Solution Structure
 
 ```

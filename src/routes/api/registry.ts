@@ -64,7 +64,7 @@ router.post('/:account/remove-module', asyncHandler(async function (req, res) {
 
     removeModule(account, name, branch, version);
 
-    res.json({ success: true, message: "The module is added to registry." });
+    res.json({ success: true, message: "The module is removed from registry." });
 }));
 
 router.post('/:account/add-site-binding', function (req, res) {
