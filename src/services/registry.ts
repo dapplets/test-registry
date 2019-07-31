@@ -51,13 +51,15 @@ export async function addModule(account: string, uri: string) {
         throw new Error("Invalid manifest.");
     }
 
-    if (!m.name || !m.branch || !m.version || !m.type || !m.dist) {
-        throw new Error("A module manifest must have filled name, branch, version, type and dist fields.");
+    if (!m.name || !m.version || !m.type || !m.dist) {
+        throw new Error("A module manifest must have filled name, version, type and dist fields.");
     }
 
     if (m.type === "FEATURE" && (!m.icon || !m.title || !m.author || !m.description)) {
         throw new Error("A feature manifest must have filled icon, title, author and description fields.");
     }
+
+    if (!m.branch) m.branch = "default";
 
     const config = getAccountConfig(account);
 
