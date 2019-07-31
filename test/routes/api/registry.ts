@@ -197,6 +197,25 @@ export function registryCreationDeletion() {
             })
             .catch(done);
     });
+    
+
+    it("should not resolve module uri by name, branch and version", function (done) {
+        chai.request(app)
+            .get(`/api/registry/${GLOBAL.ACCOUNT_NAME}/get-versions`)
+            .query({
+                name: GLOBAL.MODULE_NAME,
+                branch: GLOBAL.MODULE_BRANCH,
+                version: GLOBAL.MODULE_VERSION
+            })
+            .then(res => {
+                chai.assert.equal(res.status, 200);
+                chai.expect(res.body.success).to.eql(true);
+                chai.expect(res.body.data).instanceOf(Array);
+                chai.expect(res.body.data).length(0);
+                done();
+            })
+            .catch(done);
+    });
 
     const getErrorPaths = [
         "/api/registry/dapplets-team/get-versions",
