@@ -5,8 +5,7 @@ import { app } from "../../src/app";
 
 chai.use(chaiHttp);
 
-describe("Home Controller Unit Test", function () {
-
+export function homeTest() {
     it("should return homepage", function (done) {
         chai.request(app)
             .get("/")
@@ -17,4 +16,4 @@ describe("Home Controller Unit Test", function () {
             })
             .catch(done);
     });
-});
+};

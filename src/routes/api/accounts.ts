@@ -14,15 +14,15 @@ router.get('/', function (req, res) {
 });
 
 // create new account
-router.post('/:name', asyncHandler(async function (req, res) {
+router.post('/:name', function (req, res) {
     const { name } = req.params;
-    const key = await createAccount(name);
+    const key = createAccount(name);
     return res.json({
         success: true,
         message: "The account was created successfully.",
         data: { name, key }
     });
-}));
+});
 
 router.delete('/:name', asyncHandler(async function (req, res) {
     const { name } = req.params;

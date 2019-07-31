@@ -10,7 +10,7 @@ export function getAccountList(): string[] {
     return accountNames;
 }
 
-export async function createAccount(name: string): Promise<string> {
+export function createAccount(name: string): string {
     if (fs.existsSync(`${DATA_ACCOUNTS_PATH}/${name}.json`)) {
         throw new Error("An account with the same name already exists.");
     }
@@ -23,15 +23,7 @@ export async function createAccount(name: string): Promise<string> {
         hostnames: {}
     };
 
-    await new Promise((resolve, reject) => {
-        fs.writeFile(`${DATA_ACCOUNTS_PATH}/${name}.json`, JSON.stringify(config), 'utf8', (err) => {
-            if (err) {
-                reject("An error has occured.");
-            } else {
-                resolve();
-            }
-        })
-    });
+    saveAccountConfig(name, config);
 
     return key;
 }
@@ -68,4 +60,11 @@ export function getAccountConfig(account: string): AccountConfig {
     const json = fs.readFileSync(configPath, 'utf8');
     const config: AccountConfig = JSON.parse(json);
     return config;
+}
+
+export function saveAccountConfig(account: string, config: AccountConfig) {
+    const configPath = DATA_ACCOUNTS_PATH + '/' + account + '.json';
+
+    const json = JSON.stringify(config);
+    fs.writeFileSync(configPath, json, 'utf8');
 }

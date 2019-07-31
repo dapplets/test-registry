@@ -1,4 +1,4 @@
-import { getAccountConfig } from "./accounts";
+import { getAccountConfig, saveAccountConfig } from "./accounts";
 import { getFile } from "./storage";
 import { Manifest } from "../common/types";
 
@@ -38,11 +38,11 @@ export function getFeatures(account: string, hostname: string): { [name: string]
     return features;
 }
 
-export async function addModule(uri: string, hostnames?: string[]) {
+export async function addModule(account: string, uri: string) {
     const buf = await getFile(uri);
-    const enc = new TextDecoder("utf-8");
     const arr = new Uint8Array(buf);
-    const json = enc.decode(arr);
+    const encodedString = String.fromCharCode.apply(null, Array.from(arr));
+    const json = decodeURIComponent(escape(encodedString));
     let m: Manifest = {};
 
     try {
@@ -51,7 +51,66 @@ export async function addModule(uri: string, hostnames?: string[]) {
         throw new Error("Invalid manifest.");
     }
 
-    if (!m.name || !m.branch || !m.version || !m.type || !m.dist || !m.icon || !m.title || !m.author || !m.description) {
-        throw new Error("Not all required fields are filled in manifest.");
+    if (!m.name || !m.branch || !m.version || !m.type || !m.dist) {
+        throw new Error("A module manifest must have filled name, branch, version, type and dist fields.");
     }
+
+    if (m.type === "FEATURE" && (!m.icon || !m.title || !m.author || !m.description)) {
+        throw new Error("A feature manifest must have filled icon, title, author and description fields.");
+    }
+
+    const config = getAccountConfig(account);
+
+    if (!config.modules) config.modules = {};
+    if (!config.modules[m.name]) config.modules[m.name] = {};
+    if (!config.modules[m.name][m.branch]) config.modules[m.name][m.branch] = {};
+    if (!config.modules[m.name][m.branch][m.version]) config.modules[m.name][m.branch][m.version] = [uri];
+
+    saveAccountConfig(account, config);
+}
+
+export function removeModule(account: string, name: string, branch: string, version: string) {
+    const config = getAccountConfig(account);
+
+    if (!config.modules) return;
+    if (!config.modules[name]) return;
+    if (!config.modules[name][branch]) return;
+    if (!config.modules[name][branch][version]) return;
+
+    delete config.modules[name][branch][version];
+    if (Object.getOwnPropertyNames(config.modules[name][branch]).length === 0) delete config.modules[name][branch];
+    if (Object.getOwnPropertyNames(config.modules[name]).length === 0) delete config.modules[name];
+
+    saveAccountConfig(account, config);
+}
+
+export function addSiteBinding(account: string, name: string, branch: string, hostname: string) {
+    const config = getAccountConfig(account);
+
+    if (!config.modules || !config.modules[name] || !config.modules[name][branch] || Object.getOwnPropertyNames(config.modules[name][branch]).length === 0) {
+        throw new Error("The registry doesn't have any modules with this name and branch.");
+    }
+
+    if (!config.hostnames) config.hostnames = {};
+    if (!config.hostnames[hostname]) config.hostnames[hostname] = {};
+    if (!config.hostnames[hostname][name]) config.hostnames[hostname][name] = [];
+    config.hostnames[hostname][name].push(branch);
+
+    saveAccountConfig(account, config);
+}
+
+export function removeSiteBinding(account: string, name: string, branch: string, hostname: string) {
+    const config = getAccountConfig(account);
+
+    if (!config.hostnames) return;
+    if (!config.hostnames[hostname]) return;
+    if (!config.hostnames[hostname][name]) return;
+
+    config.hostnames[hostname][name] = config.hostnames[hostname][name].filter(f => f !== branch);
+
+    if (config.hostnames[hostname][name].length === 0) delete config.hostnames[hostname][name];
+    if (Object.getOwnPropertyNames(config.hostnames[hostname]).length === 0) delete config.modules[hostname];
+
+
+    saveAccountConfig(account, config);
 }
