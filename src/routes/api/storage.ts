@@ -15,7 +15,7 @@ router.get('/:id', asyncHandler(async function (req, res) {
 
 router.post('/', upload.single('file'), async function (req, res) {
     const file = req.file;
-    if (!file) return res.json({ success: false, message: "Invalid request." });
+    if (!file) return res.json({ success: false, message: "A file is not attached." });
     const id = await saveFile(file.buffer);
     return res.json({ success: true, data: id });
 });
@@ -23,7 +23,7 @@ router.post('/', upload.single('file'), async function (req, res) {
 router.delete('/:id', asyncHandler(async function (req, res) {
     const { id } = req.params;
     await deleteFile(id);
-    return res.json({ success: true });
+    return res.json({ success: true, message: "The file was deleted." });
 }));
 
 export default router;
