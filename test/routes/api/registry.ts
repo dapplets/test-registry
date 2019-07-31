@@ -11,7 +11,11 @@ export function registryCreationDeletion() {
 
     it("should add manifest to registry", function (done) {
         chai.request(app)
-            .post(`/api/registry/${GLOBAL.ACCOUNT_NAME}/add-module?uri=${GLOBAL.FILE_MANIFEST_ID}`)
+            .post(`/api/registry/${GLOBAL.ACCOUNT_NAME}/add-module`)
+            .query({
+                uri: GLOBAL.FILE_MANIFEST_ID,
+                key: GLOBAL.ACCOUNT_KEY
+            })
             .then(res => {
                 chai.assert.equal(res.status, 200);
                 chai.expect(res.body.success).to.eql(true);
@@ -94,7 +98,8 @@ export function registryCreationDeletion() {
             .query({
                 name: GLOBAL.MODULE_NAME,
                 branch: GLOBAL.MODULE_BRANCH,
-                site: GLOBAL.BINDING_SITE
+                site: GLOBAL.BINDING_SITE,
+                key: GLOBAL.ACCOUNT_KEY
             })
             .then(res => {
                 chai.assert.equal(res.status, 200);
@@ -128,7 +133,8 @@ export function registryCreationDeletion() {
             .query({
                 name: GLOBAL.MODULE_NAME,
                 branch: GLOBAL.MODULE_BRANCH,
-                site: GLOBAL.BINDING_SITE
+                site: GLOBAL.BINDING_SITE,
+                key: GLOBAL.ACCOUNT_KEY
             })
             .then(res => {
                 chai.assert.equal(res.status, 200);
@@ -166,7 +172,8 @@ export function registryCreationDeletion() {
             .query({
                 name: GLOBAL.MODULE_NAME,
                 branch: GLOBAL.MODULE_BRANCH,
-                version: GLOBAL.MODULE_VERSION
+                version: GLOBAL.MODULE_VERSION,
+                key: GLOBAL.ACCOUNT_KEY
             })
             .then(res => {
                 chai.assert.equal(res.status, 200);

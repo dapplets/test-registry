@@ -1,6 +1,8 @@
 import express from "express";
 import { asyncHandler } from "../../common/helpers";
+import { checkAccountKey } from "../../services/accounts";
 import { getModuleVersions, getFeatures, addModule, resolveModuleToUris, addSiteBinding, removeModule, removeSiteBinding } from "../../services/registry";
+import { AuthError } from "../../common/errors";
 
 const router = express.Router();
 
@@ -40,7 +42,9 @@ router.get('/:account/get-features', function (req, res) {
 router.post('/:account/add-module', asyncHandler(async function (req, res) {
     // ToDo: authorization
     const { account } = req.params;
-    const { uri } = req.query;
+    const { uri, key } = req.query;
+    if (!key) throw new Error("Key is required parameter.");
+    if (!checkAccountKey(account, key)) throw new AuthError();
     if (!uri) throw new Error("Uri is required parameter.");
 
     await addModule(account, uri);
@@ -51,7 +55,9 @@ router.post('/:account/add-module', asyncHandler(async function (req, res) {
 router.post('/:account/remove-module', asyncHandler(async function (req, res) {
     // ToDo: authorization
     const { account } = req.params;
-    let { name, branch, version } = req.query;
+    let { name, branch, version, key } = req.query;
+    if (!key) throw new Error("Key is required parameter.");
+    if (!checkAccountKey(account, key)) throw new AuthError();
     if (!name) throw new Error("Name is required parameter.");
     if (!version) throw new Error("Version is required parameter.");
     if (!branch) branch = "default";
@@ -64,7 +70,9 @@ router.post('/:account/remove-module', asyncHandler(async function (req, res) {
 router.post('/:account/add-site-binding', function (req, res) {
     // ToDo: authorization
     const { account } = req.params;
-    let { name, branch, site } = req.query;
+    let { name, branch, site, key } = req.query;
+    if (!key) throw new Error("Key is required parameter.");
+    if (!checkAccountKey(account, key)) throw new AuthError();
     if (!name) throw new Error("Name is required parameter.");
     if (!site) throw new Error("Site is required parameter.");
     if (!branch) branch = "default";
@@ -77,7 +85,9 @@ router.post('/:account/add-site-binding', function (req, res) {
 router.post('/:account/remove-site-binding', function (req, res) {
     // ToDo: authorization
     const { account } = req.params;
-    let { name, branch, site } = req.query;
+    let { name, branch, site, key } = req.query;
+    if (!key) throw new Error("Key is required parameter.");
+    if (!checkAccountKey(account, key)) throw new AuthError();
     if (!name) throw new Error("Name is required parameter.");
     if (!site) throw new Error("Site is required parameter.");
     if (!branch) branch = "default";
