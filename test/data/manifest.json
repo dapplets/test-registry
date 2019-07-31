@@ -1,0 +1,14 @@
+{
+    "name": "test-feature.dapplet-base.eth",
+    "branch": "default",
+    "version": "0.1.0",
+    "type": "FEATURE",
+    "title": "TEST FEATURE",
+    "description": "TEST FEATURE",
+    "author": "Dapplets Team",
+    "dist": "TEST_URI",
+    "icon": "SOME_BASE_64",
+    "dependencies": {
+        "twitter-adapter.dapplet-base.eth": "0.1.0 "
+    }
+}

@@ -1,4 +1,4 @@
-node_modules/
-data/
-build/
-.vscode/
+/node_modules/*
+/data/*
+/build/*
+/.vscode/*
