@@ -13,6 +13,7 @@ These instructions will get you a copy of the project up and running on your loc
 $/
   build/
   data/
+  docs/
   src/
   test/
   typings/
@@ -20,6 +21,7 @@ $/
 
 - `build` - Build bundles
 - `data` - File storage of modules and account configs
+- `docs` - Documentation
 - `src` - Sources
 - `test` - Mocha tests
 - `typings` - TypeScript typings
