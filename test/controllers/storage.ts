@@ -1,12 +1,12 @@
 import chai from "chai";
 import chaiHttp from "chai-http";
 import "mocha";
-import { app } from "../../../src/app";
-import { DATA_PATH } from "../../../src/common/constants";
+import { app } from "../../src/app";
+import { DATA_PATH } from "../../src/common/constants";
 import fs from "fs";
 import crypto from "crypto";
 import bs58 from "bs58";
-import { GLOBAL } from "../../global";
+import { GLOBAL } from "../global";
 
 const buf = fs.readFileSync('./test/data/manifest.json');
 const arr = new Uint8Array(buf);
@@ -39,7 +39,7 @@ export function fileCreation() {
 
     it("should return new file with its hash", function (done) {
         chai.request(app)
-            .post(`/api/storage`)
+            .post(`/${GLOBAL.ACCOUNT_NAME}/storage`)
             .type('form')
             .attach('file', './test/data/manifest.json', 'manifest.json')
             .then(res => {
@@ -54,7 +54,7 @@ export function fileCreation() {
     it("should return created file by hash", function (done) {
         // calling home page api
         chai.request(app)
-            .get("/api/storage/" + GLOBAL.FILE_MANIFEST_ID)
+            .get(`/${GLOBAL.ACCOUNT_NAME}/storage/${GLOBAL.FILE_MANIFEST_ID}`)
             .send()
             .buffer()
             .parse(binaryParser)
@@ -73,7 +73,7 @@ export function fileDeletion() {
 
     it("should return successful deletion operation", function (done) {
         chai.request(app)
-            .delete(`/api/storage/${GLOBAL.FILE_MANIFEST_ID}`)
+            .delete(`/${GLOBAL.ACCOUNT_NAME}/storage/${GLOBAL.FILE_MANIFEST_ID}`)
             .then(res => {
                 chai.expect(res.status).to.eql(200);
                 chai.expect(res.body.success).to.eql(true);

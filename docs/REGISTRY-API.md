@@ -5,21 +5,21 @@
 - [Errors](#Errors)
 - [Endpoints](#Endpoints)
   - [Account Endpoints](#Account-Endpoints)
-    - [`GET·/api/accounts`](#GETapiaccounts)
-    - [`POST·/api/accounts/{name}`](#POSTapiaccountsname)
-    - [`DELETE·/api/accounts/{name}`](#DELETEapiaccountsname)
+    - [`GET·/accounts`](#GETapiaccounts)
+    - [`POST·/accounts/{name}`](#POSTapiaccountsname)
+    - [`DELETE·/accounts/{name}`](#DELETEapiaccountsname)
   - [Storage Endpoints](#Storage-Endpoints)
-    - [`GET·/api/storage/{id}`](#GETapistorageid)
-    - [`POST·/api/storage`](#POSTapistorage)
-    - [`DELETE·/api/storage/{id}`](#DELETEapistorageid)
+    - [`GET·/{account}/storage/{id}`](#GETapistorageid)
+    - [`POST·/{account}/storage`](#POSTapistorage)
+    - [`DELETE·/{account}/storage/{id}`](#DELETEapistorageid)
   - [Registry Endpoints](#Registry-Endpoints)
-    - [`GET·/api/registry/{account}/get-versions`](#GETapiregistryaccountget-versions)
-    - [`GET·/api/registry/{account}/resolve-to-uri`](#GETapiregistryaccountresolve-to-uri)
-    - [`GET·/api/registry/{account}/get-features`](#GETapiregistryaccountget-features)
-    - [`POST·/api/registry/{account}/add-module`](#POSTapiregistryaccountadd-module)
-    - [`POST·/api/registry/{account}/remove-module`](#POSTapiregistryaccountremove-module)
-    - [`POST·/api/registry/{account}/add-site-binding`](#POSTapiregistryaccountadd-site-binding)
-    - [`POST·/api/registry/{account}/remove-site-binding`](#POSTapiregistryaccountremove-site-binding)
+    - [`GET·/{account}/registry/get-versions`](#GETapiregistryaccountget-versions)
+    - [`GET·/{account}/registry/resolve-to-uri`](#GETapiregistryaccountresolve-to-uri)
+    - [`GET·/{account}/registry/get-features`](#GETapiregistryaccountget-features)
+    - [`POST·/{account}/registry/add-module`](#POSTapiregistryaccountadd-module)
+    - [`POST·/{account}/registry/remove-module`](#POSTapiregistryaccountremove-module)
+    - [`POST·/{account}/registry/add-site-binding`](#POSTapiregistryaccountadd-site-binding)
+    - [`POST·/{account}/registry/remove-site-binding`](#POSTapiregistryaccountremove-site-binding)
 
 ## Errors
 ```json
@@ -33,7 +33,7 @@
 
 ### Account Endpoints
 
-#### `GET·/api/accounts`
+#### `GET·/accounts`
 | Name     | Value     | Kind     | Required?     | Notes     |
 |------    |-------    |------    |-----------    |-------    |
 
@@ -46,7 +46,7 @@
 }
 ```
 
-#### `POST·/api/accounts/{name}`
+#### `POST·/accounts/{name}`
 | Name     | Value     | Kind     | Required?     | Notes     |
 |------    |-------    |------    |-----------    |-------    |
 | name | String | **Path**  | ✅         | the name of new account |
@@ -62,7 +62,7 @@
 }
 ```
 
-#### `DELETE·/api/accounts/{name}`
+#### `DELETE·/accounts/{name}`
 | Name     | Value     | Kind     | Required?     | Notes     |
 |------    |-------    |------    |-----------    |-------    |
 | name | String | **Path**  | ✅         | the name of deleting account |
@@ -77,16 +77,18 @@
 
 ### Storage Endpoints
 
-#### `GET·/api/storage/{id}`
+#### `GET·/{account}/storage/{id}`
 | Name     | Value     | Kind     | Required?     | Notes     |
 |------    |-------    |------    |-----------    |-------    |
+| account | String | **Path**  | ✅         | the account name |
 | id | String | **Path**  | ✅         | the id of the file |
 
 Returns binary file.
 
-#### `POST·/api/storage`
+#### `POST·/{account}/storage`
 | Name     | Value     | Kind     | Required?     | Notes     |
 |------    |-------    |------    |-----------    |-------    |
+| account | String | **Path**  | ✅         | the account name |
 | file | String | **Form**  | ✅         | the file |
 
 ```json
@@ -96,9 +98,10 @@ Returns binary file.
 }
 ```
 
-#### `DELETE·/api/storage/{id}`
+#### `DELETE·/{account}/storage/{id}`
 | Name     | Value     | Kind     | Required?     | Notes     |
 |------    |-------    |------    |-----------    |-------    |
+| account | String | **Path**  | ✅         | the account name |
 | id| String | **Path**  | ✅         | the id of deleting file |
 
 ```json
@@ -110,7 +113,7 @@ Returns binary file.
 
 ### Registry Endpoints
 
-#### `GET·/api/registry/{account}/get-versions`
+#### `GET·/{account}/registry/get-versions`
 
 | Name     | Value     | Kind     | Required?     | Notes     |
 |------    |-------    |------    |-----------    |-------    |
@@ -125,7 +128,7 @@ Returns binary file.
 }
 ```
 
-#### `GET·/api/registry/{account}/resolve-to-uri`
+#### `GET·/{account}/registry/resolve-to-uri`
 
 | Name     | Value     | Kind     | Required?     | Notes     |
 |------    |-------    |------    |-----------    |-------    |
@@ -143,7 +146,7 @@ Returns binary file.
 }
 ```
 
-#### `GET·/api/registry/{account}/get-features`
+#### `GET·/{account}/registry/get-features`
 
 | Name     | Value     | Kind     | Required?     | Notes     |
 |------    |-------    |------    |-----------    |-------    |
@@ -160,7 +163,7 @@ Returns binary file.
 }
 ```
 
-#### `POST·/api/registry/{account}/add-module`
+#### `POST·/{account}/registry/add-module`
 
 | Name     | Value     | Kind     | Required?     | Notes     |
 |------    |-------    |------    |-----------    |-------    |
@@ -175,7 +178,7 @@ Returns binary file.
 }
 ```
 
-#### `POST·/api/registry/{account}/remove-module`
+#### `POST·/{account}/registry/remove-module`
 
 | Name     | Value     | Kind     | Required?     | Notes     |
 |------    |-------    |------    |-----------    |-------    |
@@ -192,7 +195,7 @@ Returns binary file.
 }
 ```
 
-#### `POST·/api/registry/{account}/add-site-binding`
+#### `POST·/{account}/registry/add-site-binding`
 
 | Name     | Value     | Kind     | Required?     | Notes     |
 |------    |-------    |------    |-----------    |-------    |
@@ -209,7 +212,7 @@ Returns binary file.
 }
 ```
 
-#### `POST·/api/registry/{account}/remove-site-binding`
+#### `POST·/{account}/registry/remove-site-binding`
 
 | Name     | Value     | Kind     | Required?     | Notes     |
 |------    |-------    |------    |-----------    |-------    |

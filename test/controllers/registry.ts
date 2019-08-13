@@ -1,8 +1,8 @@
 import chai from "chai";
 import chaiHttp from "chai-http";
 import "mocha";
-import { app } from "../../../src/app";
-import { GLOBAL } from "../../global";
+import { app } from "../../src/app";
+import { GLOBAL } from "../global";
 import { getDefaultSettings } from "http2";
 
 chai.use(chaiHttp);
@@ -11,7 +11,7 @@ export function registryCreationDeletion() {
 
     it("should add manifest to registry", function (done) {
         chai.request(app)
-            .post(`/api/registry/${GLOBAL.ACCOUNT_NAME}/add-module`)
+            .post(`/${GLOBAL.ACCOUNT_NAME}/registry/add-module`)
             .query({
                 uri: GLOBAL.FILE_MANIFEST_ID,
                 key: GLOBAL.ACCOUNT_KEY
@@ -26,7 +26,7 @@ export function registryCreationDeletion() {
 
     it("should return module versions list by name", function (done) {
         chai.request(app)
-            .get(`/api/registry/${GLOBAL.ACCOUNT_NAME}/get-versions`)
+            .get(`/${GLOBAL.ACCOUNT_NAME}/registry/get-versions`)
             .query({
                 name: GLOBAL.MODULE_NAME
             })
@@ -42,7 +42,7 @@ export function registryCreationDeletion() {
 
     it("should return module versions list by name and branch", function (done) {
         chai.request(app)
-            .get(`/api/registry/${GLOBAL.ACCOUNT_NAME}/get-versions`)
+            .get(`/${GLOBAL.ACCOUNT_NAME}/registry/get-versions`)
             .query({
                 name: GLOBAL.MODULE_NAME,
                 branch: GLOBAL.MODULE_BRANCH
@@ -59,7 +59,7 @@ export function registryCreationDeletion() {
 
     it("should resolve module uri by name and version", function (done) {
         chai.request(app)
-            .get(`/api/registry/${GLOBAL.ACCOUNT_NAME}/resolve-to-uri`)
+            .get(`/${GLOBAL.ACCOUNT_NAME}/registry/resolve-to-uri`)
             .query({
                 name: GLOBAL.MODULE_NAME,
                 version: GLOBAL.MODULE_VERSION
@@ -76,7 +76,7 @@ export function registryCreationDeletion() {
 
     it("should resolve module uri by name, branch and version", function (done) {
         chai.request(app)
-            .get(`/api/registry/${GLOBAL.ACCOUNT_NAME}/resolve-to-uri`)
+            .get(`/${GLOBAL.ACCOUNT_NAME}/registry/resolve-to-uri`)
             .query({
                 name: GLOBAL.MODULE_NAME,
                 branch: GLOBAL.MODULE_BRANCH,
@@ -94,7 +94,7 @@ export function registryCreationDeletion() {
 
     it("should add binding of branch with the site", function (done) {
         chai.request(app)
-            .post(`/api/registry/${GLOBAL.ACCOUNT_NAME}/add-site-binding`)
+            .post(`/${GLOBAL.ACCOUNT_NAME}/registry/add-site-binding`)
             .query({
                 name: GLOBAL.MODULE_NAME,
                 branch: GLOBAL.MODULE_BRANCH,
@@ -111,7 +111,7 @@ export function registryCreationDeletion() {
 
     it("should return available features by hostname", function (done) {
         chai.request(app)
-            .get(`/api/registry/${GLOBAL.ACCOUNT_NAME}/get-features`)
+            .get(`/${GLOBAL.ACCOUNT_NAME}/registry/get-features`)
             .query({
                 hostname: GLOBAL.BINDING_SITE
             })
@@ -129,7 +129,7 @@ export function registryCreationDeletion() {
 
     it("should remove binding of branch with the site", function (done) {
         chai.request(app)
-            .post(`/api/registry/${GLOBAL.ACCOUNT_NAME}/remove-site-binding`)
+            .post(`/${GLOBAL.ACCOUNT_NAME}/registry/remove-site-binding`)
             .query({
                 name: GLOBAL.MODULE_NAME,
                 branch: GLOBAL.MODULE_BRANCH,
@@ -146,7 +146,7 @@ export function registryCreationDeletion() {
 
     it("should not return available features by hostname", function (done) {
         chai.request(app)
-            .get(`/api/registry/${GLOBAL.ACCOUNT_NAME}/get-features`)
+            .get(`/${GLOBAL.ACCOUNT_NAME}/registry/get-features`)
             .query({
                 hostname: GLOBAL.BINDING_SITE
             })
@@ -168,7 +168,7 @@ export function registryCreationDeletion() {
 
     it("should remove manifest from registry", function (done) {
         chai.request(app)
-            .post(`/api/registry/${GLOBAL.ACCOUNT_NAME}/remove-module`)
+            .post(`/${GLOBAL.ACCOUNT_NAME}/registry/remove-module`)
             .query({
                 name: GLOBAL.MODULE_NAME,
                 branch: GLOBAL.MODULE_BRANCH,
@@ -185,7 +185,7 @@ export function registryCreationDeletion() {
 
     it("should not return module versions list by name and branch", function (done) {
         chai.request(app)
-            .get(`/api/registry/${GLOBAL.ACCOUNT_NAME}/get-versions`)
+            .get(`/${GLOBAL.ACCOUNT_NAME}/registry/get-versions`)
             .query({
                 name: GLOBAL.MODULE_NAME,
                 branch: GLOBAL.MODULE_BRANCH
@@ -208,7 +208,7 @@ export function registryCreationDeletion() {
 
     it("should not resolve module uri by name, branch and version", function (done) {
         chai.request(app)
-            .get(`/api/registry/${GLOBAL.ACCOUNT_NAME}/get-versions`)
+            .get(`/${GLOBAL.ACCOUNT_NAME}/registry/get-versions`)
             .query({
                 name: GLOBAL.MODULE_NAME,
                 branch: GLOBAL.MODULE_BRANCH,
@@ -225,18 +225,18 @@ export function registryCreationDeletion() {
     });
 
     const getErrorPaths = [
-        "/api/registry/dapplets-team/get-versions",
-        "/api/registry/dapplets-team/resolve-to-uri?name=twitter-feature-1.dapplet-base.eth",
-        "/api/registry/dapplets-team/resolve-to-uri?version=0.1.0",
-        "/api/registry/dapplets-team/resolve-to-uri?name=twitter-feature-1.dapplet-base.eth&branch=default",
-        "/api/registry/dapplets-team/resolve-to-uri?version=0.1.0&branch=default",
-        "/api/registry/dapplets-team/get-features",
-        "/api/registry/get-versions",
-        "/api/registry/resolve-to-uri?name=twitter-feature-1.dapplet-base.eth",
-        "/api/registry/resolve-to-uri?version=0.1.0",
-        "/api/registry/resolve-to-uri?name=twitter-feature-1.dapplet-base.eth&branch=default",
-        "/api/registry/resolve-to-uri?version=0.1.0&branch=default",
-        "/api/registry/get-features"
+        `/${GLOBAL.ACCOUNT_NAME}/registry/get-versions`,
+        `/${GLOBAL.ACCOUNT_NAME}/registry/resolve-to-uri?name=twitter-feature-1.dapplet-base.eth`,
+        `/${GLOBAL.ACCOUNT_NAME}/registry/resolve-to-uri?version=0.1.0`,
+        `/${GLOBAL.ACCOUNT_NAME}/registry/resolve-to-uri?name=twitter-feature-1.dapplet-base.eth&branch=default`,
+        `/${GLOBAL.ACCOUNT_NAME}/registry/resolve-to-uri?version=0.1.0&branch=default`,
+        `/${GLOBAL.ACCOUNT_NAME}/registry/get-features`,
+        `/${GLOBAL.ACCOUNT_NAME}/registry/get-versions`,
+        `/${GLOBAL.ACCOUNT_NAME}/registry/resolve-to-uri?name=twitter-feature-1.dapplet-base.eth`,
+        `/${GLOBAL.ACCOUNT_NAME}/registry/resolve-to-uri?version=0.1.0`,
+        `/${GLOBAL.ACCOUNT_NAME}/registry/resolve-to-uri?name=twitter-feature-1.dapplet-base.eth&branch=default`,
+        `/${GLOBAL.ACCOUNT_NAME}/registry/resolve-to-uri?version=0.1.0&branch=default`,
+        `/${GLOBAL.ACCOUNT_NAME}/registry/get-features`
     ];
 
     getErrorPaths.forEach(path => {
@@ -253,12 +253,12 @@ export function registryCreationDeletion() {
     });
 
     const postErrorPaths = [
-        "/api/registry/dapplets-team/add-module",
-        "/api/registry/dapplets-team/add-site-binding?name=twitter-adapter-1.dapplet-base.eth",
-        "/api/registry/dapplets-team/add-site-binding?site=twitter.com",
-        "/api/registry/add-module",
-        "/api/registry/add-site-binding?name=twitter-adapter-1.dapplet-base.eth",
-        "/api/registry/add-site-binding?site=twitter.com"
+        `/${GLOBAL.ACCOUNT_NAME}/registry/add-module`,
+        `/${GLOBAL.ACCOUNT_NAME}/registry/add-site-binding?name=twitter-adapter-1.dapplet-base.eth`,
+        `/${GLOBAL.ACCOUNT_NAME}/registry/add-site-binding?site=twitter.com`,
+        `/${GLOBAL.ACCOUNT_NAME}/registry/add-module`,
+        `/${GLOBAL.ACCOUNT_NAME}/registry/add-site-binding?name=twitter-adapter-1.dapplet-base.eth`,
+        `/${GLOBAL.ACCOUNT_NAME}/registry/add-site-binding?site=twitter.com`
     ];
 
     postErrorPaths.forEach(path => {

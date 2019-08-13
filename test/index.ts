@@ -1,7 +1,7 @@
-import { homeTest } from "./routes/home";
-import { accountCreation, accountDeletion } from "./routes/api/accounts";
-import { fileCreation, fileDeletion } from "./routes/api/storage";
-import { registryCreationDeletion } from "./routes/api/registry";
+import { homeTest } from "./controllers/home";
+import { accountCreation, accountDeletion } from "./controllers/accounts";
+import { fileCreation, fileDeletion } from "./controllers/storage";
+import { registryCreationDeletion } from "./controllers/registry";
 
 describe("Home Page", homeTest);
 describe("Account creation", accountCreation);

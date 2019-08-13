@@ -1,45 +1,42 @@
-import express from "express";
-import { asyncHandler } from "../../common/helpers";
-import { checkAccountKey } from "../../services/accounts";
-import { getModuleVersions, getFeatures, addModule, resolveModuleToUris, addSiteBinding, removeModule, removeSiteBinding } from "../../services/registry";
-import { AuthError } from "../../common/errors";
+import { asyncHandler } from "../common/helpers";
+import { checkAccountKey } from "../services/accounts";
+import * as RegistryService from "../services/registry";
+import { AuthError } from "../common/errors";
 
-const router = express.Router();
-
-router.get('/:account/get-versions', asyncHandler(async function (req, res) {
+export const getVersions = asyncHandler(async function (req: any, res: any) {
     const { account } = req.params;
     let { name, branch } = req.query;
     if (!name) throw new Error("Name is required parameter.");
     if (!branch) branch = "default";
 
-    const versions = getModuleVersions(account, name, branch);
+    const versions = RegistryService.getModuleVersions(account, name, branch);
 
     res.json({ success: true, data: versions });
-}));
+})
 
-router.get('/:account/resolve-to-uri', function (req, res) {
+export const resolveToUri = function (req: any, res: any) {
     const { account } = req.params;
     let { name, branch, version } = req.query;
     if (!name) throw new Error("Name is required parameter.");
     if (!version) throw new Error("Version is required parameter.");
     if (!branch) branch = "default";
 
-    const uris = resolveModuleToUris(account, name, branch, version);
+    const uris = RegistryService.resolveModuleToUris(account, name, branch, version);
 
     res.json({ success: true, data: uris });
-});
+}
 
-router.get('/:account/get-features', function (req, res) {
+export const getFeatures = function (req: any, res: any) {
     const { account } = req.params;
     const { hostname } = req.query;
     if (!hostname) throw new Error("Hostname is required parameter.");
 
-    const features = getFeatures(account, hostname);
+    const features = RegistryService.getFeatures(account, hostname);
 
     res.json({ success: true, data: features });
-});
+}
 
-router.post('/:account/add-module', asyncHandler(async function (req, res) {
+export const addModule = asyncHandler(async function (req: any, res: any) {
     // ToDo: authorization
     const { account } = req.params;
     const { uri, key } = req.query;
@@ -47,12 +44,12 @@ router.post('/:account/add-module', asyncHandler(async function (req, res) {
     if (!checkAccountKey(account, key)) throw new AuthError();
     if (!uri) throw new Error("Uri is required parameter.");
 
-    await addModule(account, uri);
+    await RegistryService.addModule(account, uri);
 
     res.json({ success: true, message: "The module is added to registry." });
-}));
+})
 
-router.post('/:account/remove-module', asyncHandler(async function (req, res) {
+export const removeModule = asyncHandler(async function (req: any, res: any) {
     // ToDo: authorization
     const { account } = req.params;
     let { name, branch, version, key } = req.query;
@@ -62,12 +59,12 @@ router.post('/:account/remove-module', asyncHandler(async function (req, res) {
     if (!version) throw new Error("Version is required parameter.");
     if (!branch) branch = "default";
 
-    removeModule(account, name, branch, version);
+    RegistryService.removeModule(account, name, branch, version);
 
     res.json({ success: true, message: "The module is removed from registry." });
-}));
+})
 
-router.post('/:account/add-site-binding', function (req, res) {
+export const addSiteBinding = function (req: any, res: any) {
     // ToDo: authorization
     const { account } = req.params;
     let { name, branch, site, key } = req.query;
@@ -77,12 +74,12 @@ router.post('/:account/add-site-binding', function (req, res) {
     if (!site) throw new Error("Site is required parameter.");
     if (!branch) branch = "default";
 
-    addSiteBinding(account, name, branch, site);
+    RegistryService.addSiteBinding(account, name, branch, site);
 
     res.json({ success: true, message: "The module branch is binded with the site." });
-});
+}
 
-router.post('/:account/remove-site-binding', function (req, res) {
+export const removeSiteBinding = function (req: any, res: any) {
     // ToDo: authorization
     const { account } = req.params;
     let { name, branch, site, key } = req.query;
@@ -92,9 +89,7 @@ router.post('/:account/remove-site-binding', function (req, res) {
     if (!site) throw new Error("Site is required parameter.");
     if (!branch) branch = "default";
 
-    removeSiteBinding(account, name, branch, site);
+    RegistryService.removeSiteBinding(account, name, branch, site);
 
     res.json({ success: true, message: "The module branch is unbinded from the site." });
-});
-
-export default router;
+}

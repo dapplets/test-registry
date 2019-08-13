@@ -1,20 +1,15 @@
-import express from "express";
-import { getAccountList, createAccount, deleteAccount } from "../../services/accounts";
-import { asyncHandler } from "../../common/helpers";
+import { getAccountList, createAccount, deleteAccount } from "../services/accounts";
+import { asyncHandler } from "../common/helpers";
 
-const router = express.Router();
-
-// all accounts
-router.get('/', function (req, res) {
+export function index(req: any, res: any) {
     const accountNames = getAccountList();
     res.json({
         success: true,
         data: accountNames
     });
-});
+}
 
-// create new account
-router.post('/:name', function (req, res) {
+export function create(req: any, res: any) {
     const { name } = req.params;
     const key = createAccount(name);
     return res.json({
@@ -22,17 +17,15 @@ router.post('/:name', function (req, res) {
         message: "The account was created successfully.",
         data: { name, key }
     });
-});
+}
 
-router.delete('/:name', asyncHandler(async function (req, res) {
+export const del = asyncHandler(async function (req: any, res: any) {
     const { name } = req.params;
     const { key } = req.query;
-    
+
     await deleteAccount(name, key);
     return res.json({
         success: true,
         message: "The account was deleted successfully."
     });
-}));
-
-export default router;
+})
