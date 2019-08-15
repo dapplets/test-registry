@@ -66,7 +66,13 @@ export async function addModule(account: string, uri: string) {
     if (!config.modules) config.modules = {};
     if (!config.modules[m.name]) config.modules[m.name] = {};
     if (!config.modules[m.name][m.branch]) config.modules[m.name][m.branch] = {};
-    if (!config.modules[m.name][m.branch][m.version]) config.modules[m.name][m.branch][m.version] = [uri];
+    if (!config.modules[m.name][m.branch][m.version]) config.modules[m.name][m.branch][m.version] = [];
+
+    if (config.modules[m.name][m.branch][m.version].indexOf(uri) !== -1) {
+        throw new Error(`This URI already exists in "${m.name}#${m.branch}@${m.version}"`);
+    } else {
+        config.modules[m.name][m.branch][m.version].push(uri);
+    }
 
     saveAccountConfig(account, config);
 }
@@ -96,7 +102,12 @@ export function addSiteBinding(account: string, name: string, branch: string, ho
     if (!config.hostnames) config.hostnames = {};
     if (!config.hostnames[hostname]) config.hostnames[hostname] = {};
     if (!config.hostnames[hostname][name]) config.hostnames[hostname][name] = [];
-    config.hostnames[hostname][name].push(branch);
+
+    if (config.hostnames[hostname][name].indexOf(branch) !== -1) {
+        throw new Error(`This hostname already exists in "${name}#${branch}"`);
+    } else {
+        config.hostnames[hostname][name].push(branch);
+    }
 
     saveAccountConfig(account, config);
 }

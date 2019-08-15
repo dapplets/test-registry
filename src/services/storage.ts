@@ -22,6 +22,8 @@ export async function saveFile(buf: ArrayBuffer): Promise<string> {
 
     const path = DATA_STORAGE_PATH + '/' + id;
 
+    if (fs.existsSync(path)) throw new Error("The file already exists.");
+
     await new Promise<Buffer>((resolve, reject) =>
         fs.writeFile(path, buf, (err) => err ? reject(err.message) : resolve())
     );
