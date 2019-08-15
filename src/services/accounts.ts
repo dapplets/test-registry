@@ -65,6 +65,6 @@ export function getAccountConfig(account: string): AccountConfig {
 export function saveAccountConfig(account: string, config: AccountConfig) {
     const configPath = DATA_ACCOUNTS_PATH + '/' + account + '.json';
 
-    const json = JSON.stringify(config);
+    const json = JSON.stringify(config, null, 2);
     fs.writeFileSync(configPath, json, 'utf8');
 }
