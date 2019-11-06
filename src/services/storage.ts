@@ -2,13 +2,23 @@ import { DATA_STORAGE_PATH } from "../common/constants";
 import fs from "fs";
 import crypto from "crypto";
 import bs58 from "bs58";
+import fetch from "node-fetch";
 
-export async function getFile(id: string): Promise<ArrayBuffer> {
-    const path = DATA_STORAGE_PATH + '/' + id;
-    const buf = await new Promise<Buffer>((resolve, reject) =>
-        fs.readFile(path, (err, buf) => err ? reject(err.message) : resolve(buf))
-    );
-    return buf;
+export async function getFile(url: string): Promise<ArrayBuffer> {
+    const protocol = url.substring(0, url.indexOf(":"));
+
+    switch (protocol) {
+        case "http":
+        case "https":
+            return await (await fetch(url)).arrayBuffer();
+        case "bzz":
+            // ToDo: parametrize gateway url
+            return await (await fetch("https://swarm-gateways.net/" + url)).arrayBuffer();
+        default:
+            return await new Promise<Buffer>((resolve, reject) =>
+                fs.readFile(DATA_STORAGE_PATH + '/' + url, (err, buf) => err ? reject(err.message) : resolve(buf))
+            );
+    }
 }
 
 export async function saveFile(buf: ArrayBuffer): Promise<string> {
@@ -21,7 +31,6 @@ export async function saveFile(buf: ArrayBuffer): Promise<string> {
     const id = multihash.toString();
 
     const path = DATA_STORAGE_PATH + '/' + id;
-
     if (fs.existsSync(path)) throw new Error("The file already exists.");
 
     await new Promise<Buffer>((resolve, reject) =>

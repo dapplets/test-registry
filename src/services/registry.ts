@@ -43,6 +43,7 @@ export async function addModule(account: string, uri: string) {
     const arr = new Uint8Array(buf);
     const encodedString = String.fromCharCode.apply(null, Array.from(arr));
     const json = decodeURIComponent(escape(encodedString));
+    
     let m: Manifest = {};
 
     try {
@@ -123,7 +124,6 @@ export function removeSiteBinding(account: string, name: string, branch: string,
 
     if (config.hostnames[hostname][name].length === 0) delete config.hostnames[hostname][name];
     if (Object.getOwnPropertyNames(config.hostnames[hostname]).length === 0) delete config.modules[hostname];
-
 
     saveAccountConfig(account, config);
 }
