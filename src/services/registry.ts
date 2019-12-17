@@ -26,14 +26,20 @@ export function resolveModuleToUris(account: string, name: string, branch: strin
     return uris;
 }
 
-export function getFeatures(account: string, hostname: string): { [name: string]: string[] } {
+export function getFeatures(account: string, hostnames: string[]): { [name: string]: string[] } {
     const config = getAccountConfig(account);
 
-    if (!config || !config.hostnames || !config.hostnames[hostname]) {
+    if (!config || !config.hostnames) {
         return {};
     }
 
-    const features = config.hostnames[hostname];
+    let features = {};
+
+    for (const hostname of hostnames) {
+        if (config.hostnames[hostname]) {
+            features = { ...features, ...config.hostnames[hostname] };
+        }
+    }
 
     return features;
 }
@@ -43,7 +49,7 @@ export async function addModule(account: string, uri: string) {
     const arr = new Uint8Array(buf);
     const encodedString = String.fromCharCode.apply(null, Array.from(arr));
     const json = decodeURIComponent(escape(encodedString));
-    
+
     let m: Manifest = {};
 
     try {

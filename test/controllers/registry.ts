@@ -98,7 +98,7 @@ export function registryCreationDeletion() {
             .query({
                 name: GLOBAL.MODULE_NAME,
                 branch: GLOBAL.MODULE_BRANCH,
-                site: GLOBAL.BINDING_SITE,
+                site: GLOBAL.BINDING_SITE_1,
                 key: GLOBAL.ACCOUNT_KEY
             })
             .then(res => {
@@ -113,7 +113,41 @@ export function registryCreationDeletion() {
         chai.request(app)
             .get(`/${GLOBAL.ACCOUNT_NAME}/registry/get-features`)
             .query({
-                hostname: GLOBAL.BINDING_SITE
+                hostname: GLOBAL.BINDING_SITE_1
+            })
+            .then(res => {
+                chai.assert.equal(res.status, 200);
+                chai.expect(res.body.success).to.eql(true);
+                chai.expect(res.body.data).instanceOf(Object);
+                chai.expect(res.body.data).haveOwnProperty(GLOBAL.MODULE_NAME);
+                chai.expect(res.body.data[GLOBAL.MODULE_NAME]).instanceOf(Array);
+                chai.expect(res.body.data[GLOBAL.MODULE_NAME]).contains(GLOBAL.MODULE_BRANCH);
+                done();
+            })
+            .catch(done);
+    });
+
+    it("should not return features by unregistered site-binding", function (done) {
+        chai.request(app)
+            .get(`/${GLOBAL.ACCOUNT_NAME}/registry/get-features`)
+            .query({
+                hostname: GLOBAL.BINDING_SITE_2
+            })
+            .then(res => {
+                chai.assert.equal(res.status, 200);
+                chai.expect(res.body.success).to.eql(true);
+                chai.expect(res.body.data).instanceOf(Object);
+                chai.expect(Object.getOwnPropertyNames(res.body.data)).length(0);
+                done();
+            })
+            .catch(done);
+    });
+
+    it("should accept multiple hostnames", function (done) {
+        chai.request(app)
+            .get(`/${GLOBAL.ACCOUNT_NAME}/registry/get-features`)
+            .query({
+                hostname: [GLOBAL.BINDING_SITE_1, GLOBAL.BINDING_SITE_2]
             })
             .then(res => {
                 chai.assert.equal(res.status, 200);
@@ -133,7 +167,7 @@ export function registryCreationDeletion() {
             .query({
                 name: GLOBAL.MODULE_NAME,
                 branch: GLOBAL.MODULE_BRANCH,
-                site: GLOBAL.BINDING_SITE,
+                site: GLOBAL.BINDING_SITE_1,
                 key: GLOBAL.ACCOUNT_KEY
             })
             .then(res => {
@@ -148,7 +182,7 @@ export function registryCreationDeletion() {
         chai.request(app)
             .get(`/${GLOBAL.ACCOUNT_NAME}/registry/get-features`)
             .query({
-                hostname: GLOBAL.BINDING_SITE
+                hostname: GLOBAL.BINDING_SITE_1
             })
             .then(res => {
                 chai.assert.equal(res.status, 200);
@@ -204,7 +238,7 @@ export function registryCreationDeletion() {
             })
             .catch(done);
     });
-    
+
 
     it("should not resolve module uri by name, branch and version", function (done) {
         chai.request(app)

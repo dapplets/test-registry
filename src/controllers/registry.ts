@@ -30,8 +30,9 @@ export const getFeatures = function (req: any, res: any) {
     const { account } = req.params;
     const { hostname } = req.query;
     if (!hostname) throw new Error("Hostname is required parameter.");
+    const hostnames = Array.isArray(hostname) ? hostname : [hostname];
 
-    const features = RegistryService.getFeatures(account, hostname);
+    const features = RegistryService.getFeatures(account, hostnames);
 
     res.json({ success: true, data: features });
 }

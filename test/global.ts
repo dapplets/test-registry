@@ -6,5 +6,6 @@ export var GLOBAL = {
     MODULE_NAME: "test-feature.dapplet-base.eth",
     MODULE_BRANCH: "default",
     MODULE_VERSION: "0.1.0",
-    BINDING_SITE: "twitter.com"
+    BINDING_SITE_1: "twitter.com",
+    BINDING_SITE_2: "mobile.twitter.com"
 }
