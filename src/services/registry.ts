@@ -26,18 +26,18 @@ export function resolveModuleToUris(account: string, name: string, branch: strin
     return uris;
 }
 
-export function getFeatures(account: string, hostnames: string[]): { [name: string]: string[] } {
+export function getFeatures(account: string, hostnames: string[]): { [hostname: string]: { [name: string]: string[] } } {
     const config = getAccountConfig(account);
 
     if (!config || !config.hostnames) {
         return {};
     }
 
-    let features = {};
+    const features: any = {};
 
     for (const hostname of hostnames) {
         if (config.hostnames[hostname]) {
-            features = { ...features, ...config.hostnames[hostname] };
+            features[hostname] = config.hostnames[hostname];
         }
     }
 

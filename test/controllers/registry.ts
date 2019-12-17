@@ -119,9 +119,11 @@ export function registryCreationDeletion() {
                 chai.assert.equal(res.status, 200);
                 chai.expect(res.body.success).to.eql(true);
                 chai.expect(res.body.data).instanceOf(Object);
-                chai.expect(res.body.data).haveOwnProperty(GLOBAL.MODULE_NAME);
-                chai.expect(res.body.data[GLOBAL.MODULE_NAME]).instanceOf(Array);
-                chai.expect(res.body.data[GLOBAL.MODULE_NAME]).contains(GLOBAL.MODULE_BRANCH);
+                chai.expect(res.body.data).haveOwnProperty(GLOBAL.BINDING_SITE_1);
+                chai.expect(res.body.data[GLOBAL.BINDING_SITE_1]).instanceOf(Object);
+                chai.expect(res.body.data[GLOBAL.BINDING_SITE_1]).haveOwnProperty(GLOBAL.MODULE_NAME);
+                chai.expect(res.body.data[GLOBAL.BINDING_SITE_1][GLOBAL.MODULE_NAME]).instanceOf(Array);
+                chai.expect(res.body.data[GLOBAL.BINDING_SITE_1][GLOBAL.MODULE_NAME]).contains(GLOBAL.MODULE_BRANCH);
                 done();
             })
             .catch(done);
@@ -153,9 +155,11 @@ export function registryCreationDeletion() {
                 chai.assert.equal(res.status, 200);
                 chai.expect(res.body.success).to.eql(true);
                 chai.expect(res.body.data).instanceOf(Object);
-                chai.expect(res.body.data).haveOwnProperty(GLOBAL.MODULE_NAME);
-                chai.expect(res.body.data[GLOBAL.MODULE_NAME]).instanceOf(Array);
-                chai.expect(res.body.data[GLOBAL.MODULE_NAME]).contains(GLOBAL.MODULE_BRANCH);
+                chai.expect(res.body.data).haveOwnProperty(GLOBAL.BINDING_SITE_1);
+                chai.expect(res.body.data[GLOBAL.BINDING_SITE_1]).instanceOf(Object);
+                chai.expect(res.body.data[GLOBAL.BINDING_SITE_1]).haveOwnProperty(GLOBAL.MODULE_NAME);
+                chai.expect(res.body.data[GLOBAL.BINDING_SITE_1][GLOBAL.MODULE_NAME]).instanceOf(Array);
+                chai.expect(res.body.data[GLOBAL.BINDING_SITE_1][GLOBAL.MODULE_NAME]).contains(GLOBAL.MODULE_BRANCH);
                 done();
             })
             .catch(done);
