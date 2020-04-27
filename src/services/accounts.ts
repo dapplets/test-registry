@@ -20,7 +20,8 @@ export function createAccount(name: string): string {
     const config: AccountConfig = {
         secret: key,
         modules: {},
-        hostnames: {}
+        hostnames: {},
+        hashUris: {}
     };
 
     saveAccountConfig(name, config);

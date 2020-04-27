@@ -17,9 +17,13 @@
     - [`GET·/{account}/registry/resolve-to-uri`](#GETapiregistryaccountresolve-to-uri)
     - [`GET·/{account}/registry/get-features`](#GETapiregistryaccountget-features)
     - [`POST·/{account}/registry/add-module`](#POSTapiregistryaccountadd-module)
+    - [`POST·/{account}/registry/add-module-with-objects`](#POSTapiregistryaccountadd-module-with-objects)
     - [`POST·/{account}/registry/remove-module`](#POSTapiregistryaccountremove-module)
     - [`POST·/{account}/registry/add-site-binding`](#POSTapiregistryaccountadd-site-binding)
     - [`POST·/{account}/registry/remove-site-binding`](#POSTapiregistryaccountremove-site-binding)
+    - [`POST·/{account}/registry/hash-to-uris`](#POSTapiregistryaccounthash-to-uris)
+    - [`POST·/{account}/registry/add-hash-uri`](#POSTapiregistryaccountadd-hash-uri)
+    - [`POST·/{account}/registry/remove-hash-uri`](#POSTapiregistryaccountremove-hash-uri)
 
 ## Errors
 ```json
@@ -94,7 +98,7 @@ Returns binary file.
 ```json
 {
   "success": true,
-  "data": "QmTjdrQg6ESPh3aDVt92HwfLPjSsfctoQm4z3uKNob13zP"
+  "data": "02f69cad51b9f50630823ba0b077255d1b7247f0b1b2fedd516f9f6e20b13684"
 }
 ```
 
@@ -124,7 +128,7 @@ Returns binary file.
 ```json
 {
   "success": true,
-  "data": "QmTjdrQg6ESPh3aDVt92HwfLPjSsfctoQm4z3uKNob13zP"
+  "data": ["0.1.0", "0.1.1", "0.1.2", "0.1.3"]
 }
 ```
 
@@ -140,9 +144,12 @@ Returns binary file.
 ```json
 {
   "success": true,
-  "data": [
-    "ipfs://QmTjdrQg6ESPh3aDVt92HwfLPjSsfctoQm4z3uKNob13zP"
-  ]
+  "data": {
+    "hash": "02f69cad51b9f50630823ba0b077255d1b7247f0b1b2fedd516f9f6e20b13684",
+    "uris": [
+      "ipfs://QmTjdrQg6ESPh3aDVt92HwfLPjSsfctoQm4z3uKNob13zP"
+    ] 
+  }
 }
 ```
 
@@ -169,7 +176,28 @@ Returns binary file.
 |------    |-------    |------    |-----------    |-------    |
 | account | String | **Path**  | ✅         | the account name |
 | key | String | **Query**  | ✅         | the secret key of the account |
-| uri | String | **Query**  | ✅         | the uri of the module manifest |
+| name | String | **Query**  | ✅         | the name of the module |
+| branch | String | **Query**  | ✅         | the branch of the module |
+| version | String | **Query**  | ✅         | the version of the module |
+| manifestHash | String | **Query**  | ✅         | the hash of the module manifest |
+
+```json
+{
+  "success": true,
+  "message": "The module is added to registry."
+}
+```
+
+#### `POST·/{account}/registry/add-module-with-objects`
+
+| Name     | Value     | Kind     | Required?     | Notes     |
+|------    |-------    |------    |-----------    |-------    |
+| account | String | **Path**  | ✅         | the account name |
+| key | String | **Query**  | ✅         | the secret key of the account |
+| name | String | **Query**  | ✅         | the name of the module |
+| branch | String | **Query**  | ✅         | the branch of the module |
+| version | String | **Query**  | ✅         | the version of the module |
+| hashUris | { hash: string, uri: string }[] | **Query**  | ✅         | the array the module objects |
 
 ```json
 {
@@ -226,5 +254,51 @@ Returns binary file.
 {
   "success": true,
   "message": "The module branch is unbinded from the site."
+}
+```
+
+#### `GET·/{account}/registry/hash-to-uris`
+
+| Name     | Value     | Kind     | Required?     | Notes     |
+|------    |-------    |------    |-----------    |-------    |
+| account | String | **Path**  | ✅         | the account name |
+| hash | String | **Query**  | ✅         | the hash of the module object |
+
+```json
+{
+  "success": true,
+  "data": [
+    "ipfs://QmTjdrQg6ESPh3aDVt92HwfLPjSsfctoQm4z3uKNob13zP"
+  ]
+}
+```
+
+#### `POST·/{account}/registry/add-hash-uri`
+
+| Name     | Value     | Kind     | Required?     | Notes     |
+|------    |-------    |------    |-----------    |-------    |
+| account | String | **Path**  | ✅         | the account name |
+| hash | String | **Query**  | ✅         | the hash of the module object |
+| uri | String | **Query**  | ✅         | the URI of the module object |
+
+```json
+{
+  "success": true,
+  "message": "The URI is added to the hash."
+}
+```
+
+#### `POST·/{account}/registry/remove-hash-uri`
+
+| Name     | Value     | Kind     | Required?     | Notes     |
+|------    |-------    |------    |-----------    |-------    |
+| account | String | **Path**  | ✅         | the account name |
+| hash | String | **Query**  | ✅         | the hash of the module object |
+| uri | String | **Query**  | ✅         | the URI of the module object |
+
+```json
+{
+  "success": true,
+  "message": "The URI is removed from the hash."
 }
 ```

@@ -18,9 +18,13 @@ router.get('/:account/registry/get-versions', registry.getVersions);
 router.get('/:account/registry/resolve-to-uri', registry.resolveToUri);
 router.get('/:account/registry/get-features', registry.getFeatures);
 router.post('/:account/registry/add-module', registry.addModule);
+router.post('/:account/registry/add-module-with-objects', registry.addModuleWithObjects);
 router.post('/:account/registry/remove-module', registry.removeModule);
 router.post('/:account/registry/add-site-binding', registry.addSiteBinding);
 router.post('/:account/registry/remove-site-binding', registry.removeSiteBinding);
+router.get('/:account/registry/hash-to-uris', registry.hashToUris);
+router.post('/:account/registry/add-hash-uri', registry.addHashUri);
+router.post('/:account/registry/remove-hash-uri', registry.removeHashUri);
 
 router.get('/:account/storage/:id', storage.getById);
 router.post('/:account/storage/', upload.single('file'), storage.post);

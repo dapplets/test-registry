@@ -40,12 +40,33 @@ export const getFeatures = function (req: any, res: any) {
 export const addModule = asyncHandler(async function (req: any, res: any) {
     // ToDo: authorization
     const { account } = req.params;
-    const { uri, key } = req.query;
-    if (!key) throw new Error("Key is required parameter.");
+    const { name, branch, version, manifestHash, key } = req.query;
+    
+    if (!key) throw new Error("key is required parameter.");
     if (!checkAccountKey(account, key)) throw new AuthError();
-    if (!uri) throw new Error("Uri is required parameter.");
+    if (!name) throw new Error("name is required parameter.");
+    if (!branch) throw new Error("branch is required parameter.");
+    if (!version) throw new Error("version is required parameter.");
+    if (!manifestHash) throw new Error("manifestHash is required parameter.");
 
-    await RegistryService.addModule(account, uri);
+    await RegistryService.addModule(account, name, branch, version, manifestHash);
+
+    res.json({ success: true, message: "The module is added to registry." });
+})
+
+export const addModuleWithObjects = asyncHandler(async function (req: any, res: any) {
+    // ToDo: authorization
+    const { account } = req.params;
+    const { name, branch, version, hashUris, key } = req.query;
+    
+    if (!key) throw new Error("key is required parameter.");
+    if (!checkAccountKey(account, key)) throw new AuthError();
+    if (!name) throw new Error("name is required parameter.");
+    if (!branch) throw new Error("branch is required parameter.");
+    if (!version) throw new Error("version is required parameter.");
+    if (!hashUris) throw new Error("hashUris is required parameter.");
+
+    await RegistryService.addModuleWithObjects(account, name, branch, version, hashUris);
 
     res.json({ success: true, message: "The module is added to registry." });
 })
@@ -93,4 +114,45 @@ export const removeSiteBinding = function (req: any, res: any) {
     RegistryService.removeSiteBinding(account, name, branch, site);
 
     res.json({ success: true, message: "The module branch is unbinded from the site." });
+}
+
+export const hashToUris = function (req: any, res: any) {
+    // ToDo: authorization
+    const { account } = req.params;
+    const { hash } = req.query;
+
+    if (!account) throw new Error("account is required parameter.");
+    if (!hash) throw new Error("hash is required parameter.");
+
+    const uris = RegistryService.hashToUris(account, hash);
+
+    res.json({ success: true, data: uris });
+}
+
+export const addHashUri = function (req: any, res: any) {
+    // ToDo: authorization
+    const { account } = req.params;
+    let { hash, uri, key } = req.query;
+    if (!key) throw new Error("key is required parameter.");
+    if (!checkAccountKey(account, key)) throw new AuthError();
+    if (!hash) throw new Error("hash is required parameter.");
+    if (!uri) throw new Error("uri is required parameter.");
+
+    RegistryService.addHashUri(account, hash, uri);
+
+    res.json({ success: true, message: "The URI is added to the hash." });
+}
+
+export const removeHashUri = function (req: any, res: any) {
+    // ToDo: authorization
+    const { account } = req.params;
+    let { hash, uri, key } = req.query;
+    if (!key) throw new Error("key is required parameter.");
+    if (!checkAccountKey(account, key)) throw new AuthError();
+    if (!hash) throw new Error("hash is required parameter.");
+    if (!uri) throw new Error("uri is required parameter.");
+
+    RegistryService.removeHashUri(account, hash, uri);
+
+    res.json({ success: true, message: "The URI is removed from the hash." });
 }

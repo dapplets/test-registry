@@ -1,6 +1,4 @@
 import { getAccountConfig, saveAccountConfig } from "./accounts";
-import { getFile } from "./storage";
-import { Manifest } from "../common/types";
 
 export function getModuleVersions(account: string, name: string, branch: string): string[] {
     const config = getAccountConfig(account);
@@ -14,16 +12,20 @@ export function getModuleVersions(account: string, name: string, branch: string)
     return versions;
 }
 
-export function resolveModuleToUris(account: string, name: string, branch: string, version: string): string[] {
+export function resolveModuleToUris(account: string, name: string, branch: string, version: string): { hash: string, uris: string[] } {
     const config = getAccountConfig(account);
 
     if (!config || !config.modules || !config.modules[name] || !config.modules[name][branch] || !config.modules[name][branch][version]) {
-        return [];
+        throw new Error(`Module "${name}#${branch}@${version}" doesn't exist in the Registry.`);
     }
 
-    const uris = config.modules[name][branch][version];
+    const manifestHash = config.modules[name][branch][version];
+    const uris = hashToUris(account, manifestHash);
 
-    return uris;
+    return {
+        hash: manifestHash,
+        uris: uris
+    };
 }
 
 export function getFeatures(account: string, hostnames: string[]): { [hostname: string]: { [name: string]: string[] } } {
@@ -44,44 +46,40 @@ export function getFeatures(account: string, hostnames: string[]): { [hostname: 
     return features;
 }
 
-export async function addModule(account: string, uri: string) {
-    const buf = await getFile(uri);
-    const arr = new Uint8Array(buf);
-    const encodedString = String.fromCharCode.apply(null, Array.from(arr));
-    const json = decodeURIComponent(escape(encodedString));
-
-    let m: Manifest = {};
-
-    try {
-        m = JSON.parse(json);
-    } catch {
-        throw new Error("Invalid manifest.");
+export async function addModule(account: string, name: string, branch: string, version: string, manifestHash: string) {
+    if (!name || !branch || !version) {
+        throw new Error("A module name, branch, version are required.");
     }
-
-    if (!m.name || !m.version || !m.type || !m.dist) {
-        throw new Error("A module manifest must have filled name, version, type and dist fields.");
-    }
-
-    if (m.type === "FEATURE" && (!m.icon || !m.title || !m.author || !m.description)) {
-        throw new Error("A feature manifest must have filled icon, title, author and description fields.");
-    }
-
-    if (!m.branch) m.branch = "default";
 
     const config = getAccountConfig(account);
 
     if (!config.modules) config.modules = {};
-    if (!config.modules[m.name]) config.modules[m.name] = {};
-    if (!config.modules[m.name][m.branch]) config.modules[m.name][m.branch] = {};
-    if (!config.modules[m.name][m.branch][m.version]) config.modules[m.name][m.branch][m.version] = [];
+    if (!config.modules[name]) config.modules[name] = {};
+    if (!config.modules[name][branch]) config.modules[name][branch] = {};
 
-    if (config.modules[m.name][m.branch][m.version].indexOf(uri) !== -1) {
-        throw new Error(`This URI already exists in "${m.name}#${m.branch}@${m.version}"`);
+    if (!config.modules[name][branch][version]) {
+        config.modules[name][branch][version] = manifestHash;
     } else {
-        config.modules[m.name][m.branch][m.version].push(uri);
+        throw new Error(`Module "${name}#${branch}@${version}" already exists in the Registry.`);
     }
 
     saveAccountConfig(account, config);
+}
+
+export async function addModuleWithObjects(account: string, name: string, branch: string, version: string, hashUris: { hash: string, uri: string }[]) {
+    if (!name || !branch || !version) {
+        throw new Error("A module name, branch, version are required.");
+    }    
+    if (!hashToUris || hashToUris.length === 0) {
+        throw new Error("Module must have objects with hashes and URIs.");
+    }
+
+    for (const { hash, uri } of hashUris) {
+        addHashUri(account, hash, uri);
+    }
+    
+    const manifestHash = hashUris[0].hash;
+    await addModule(account, name, branch, version, manifestHash);
 }
 
 export function removeModule(account: string, name: string, branch: string, version: string) {
@@ -130,6 +128,39 @@ export function removeSiteBinding(account: string, name: string, branch: string,
 
     if (config.hostnames[hostname][name].length === 0) delete config.hostnames[hostname][name];
     if (Object.getOwnPropertyNames(config.hostnames[hostname]).length === 0) delete config.modules[hostname];
+
+    saveAccountConfig(account, config);
+}
+
+export function hashToUris(account: string, hash: string): string[] {
+    const config = getAccountConfig(account);
+    return config?.hashUris?.[hash] || [];
+}
+
+export function addHashUri(account: string, hash: string, uri: string) {
+    const config = getAccountConfig(account);
+
+    if (!config.hashUris) config.hashUris = {};
+    if (!config.hashUris[hash]) config.hashUris[hash] = [];
+
+    if (config.hashUris[hash].indexOf(uri) !== -1) {
+        throw new Error(`This URI already exists in this hash.`);
+    } else {
+        config.hashUris[hash].push(uri);
+    }
+
+    saveAccountConfig(account, config);
+}
+
+export function removeHashUri(account: string, hash: string, uri: string) {
+    const config = getAccountConfig(account);
+
+    if (!config.hashUris) return;
+    if (!config.hashUris[hash]) return;
+
+    config.hashUris[hash] = config.hashUris[hash].filter(u => u !== uri);
+
+    if (config.hashUris[hash].length === 0) delete config.hashUris[hash];
 
     saveAccountConfig(account, config);
 }

@@ -4,7 +4,7 @@ export type AccountConfig = {
     modules: {
         [name: string]: {
             [branch: string]: {
-                [version: string]: string[];
+                [version: string]: string;
             }
         }
     };
@@ -14,6 +14,10 @@ export type AccountConfig = {
             [name: string]: string[]
         }
     };
+
+    hashUris: {
+        [hash: string]: string[]
+    }
 }
 
 export type Manifest = {

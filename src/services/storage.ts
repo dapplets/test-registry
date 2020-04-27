@@ -1,34 +1,15 @@
 import { DATA_STORAGE_PATH } from "../common/constants";
 import fs from "fs";
-import crypto from "crypto";
-import bs58 from "bs58";
-import fetch from "node-fetch";
+import * as ethers from "ethers";
 
-export async function getFile(url: string): Promise<ArrayBuffer> {
-    const protocol = url.substring(0, url.indexOf(":"));
-
-    switch (protocol) {
-        case "http":
-        case "https":
-            return await (await fetch(url)).arrayBuffer();
-        case "bzz":
-            // ToDo: parametrize gateway url
-            return await (await fetch("https://swarm-gateways.net/" + url)).arrayBuffer();
-        default:
-            return await new Promise<Buffer>((resolve, reject) =>
-                fs.readFile(DATA_STORAGE_PATH + '/' + url, (err, buf) => err ? reject(err.message) : resolve(buf))
-            );
-    }
+export async function getFile(id: string): Promise<ArrayBuffer> {
+    return await new Promise<Buffer>((resolve, reject) =>
+        fs.readFile(DATA_STORAGE_PATH + '/' + id, (err, buf) => err ? reject(err.message) : resolve(buf))
+    );
 }
 
 export async function saveFile(buf: ArrayBuffer): Promise<string> {
-    const arr = new Uint8Array(buf);
-    const hashFunction = Buffer.from('12', 'hex');
-    const digest = crypto.createHash('sha256').update(arr).digest();
-    const digestSize = Buffer.from(digest.byteLength.toString(16), 'hex');
-    const combined = Buffer.concat([hashFunction, digestSize, digest]);
-    const multihash = bs58.encode(combined);
-    const id = multihash.toString();
+    const id = ethers.utils.keccak256(new Uint8Array(buf)).substring(2);
 
     const path = DATA_STORAGE_PATH + '/' + id;
     if (fs.existsSync(path)) return id;

@@ -9,12 +9,47 @@ chai.use(chaiHttp);
 
 export function registryCreationDeletion() {
 
+    it("should add hash uri to registry", function (done) {
+        chai.request(app)
+            .post(`/${GLOBAL.ACCOUNT_NAME}/registry/add-hash-uri`)
+            .query({
+                key: GLOBAL.ACCOUNT_KEY,
+                hash: GLOBAL.FILE_MANIFEST_HASH,
+                uri: GLOBAL.FILE_MANIFEST_ID
+            })
+            .then(res => {
+                chai.assert.equal(res.status, 200);
+                chai.expect(res.body.success).to.eql(true);
+                done();
+            })
+            .catch(done);
+    });
+
+    it("should resolve hash to uris", function (done) {
+        chai.request(app)
+            .get(`/${GLOBAL.ACCOUNT_NAME}/registry/hash-to-uris`)
+            .query({
+                hash: GLOBAL.FILE_MANIFEST_HASH
+            })
+            .then(res => {
+                chai.assert.equal(res.status, 200);
+                chai.expect(res.body.success).to.eql(true);
+                chai.expect(res.body.data).instanceOf(Array);
+                chai.expect(res.body.data).contains(GLOBAL.FILE_MANIFEST_ID);
+                done();
+            })
+            .catch(done);
+    });
+
     it("should add manifest to registry", function (done) {
         chai.request(app)
             .post(`/${GLOBAL.ACCOUNT_NAME}/registry/add-module`)
             .query({
-                uri: GLOBAL.FILE_MANIFEST_ID,
-                key: GLOBAL.ACCOUNT_KEY
+                name: GLOBAL.MODULE_NAME,
+                branch: GLOBAL.MODULE_BRANCH,
+                version: GLOBAL.MODULE_VERSION,
+                key: GLOBAL.ACCOUNT_KEY,
+                manifestHash: GLOBAL.FILE_MANIFEST_HASH
             })
             .then(res => {
                 chai.assert.equal(res.status, 200);
@@ -67,8 +102,10 @@ export function registryCreationDeletion() {
             .then(res => {
                 chai.assert.equal(res.status, 200);
                 chai.expect(res.body.success).to.eql(true);
-                chai.expect(res.body.data).instanceOf(Array);
-                chai.expect(res.body.data).contains(GLOBAL.FILE_MANIFEST_ID);
+                chai.expect(res.body.data).haveOwnProperty("hash");
+                chai.expect(res.body.data).haveOwnProperty("uris");
+                chai.expect(res.body.data.hash).eq(GLOBAL.FILE_MANIFEST_HASH);
+                chai.expect(res.body.data.uris).contains(GLOBAL.FILE_MANIFEST_ID);
                 done();
             })
             .catch(done);
@@ -79,14 +116,15 @@ export function registryCreationDeletion() {
             .get(`/${GLOBAL.ACCOUNT_NAME}/registry/resolve-to-uri`)
             .query({
                 name: GLOBAL.MODULE_NAME,
-                branch: GLOBAL.MODULE_BRANCH,
                 version: GLOBAL.MODULE_VERSION
             })
             .then(res => {
                 chai.assert.equal(res.status, 200);
                 chai.expect(res.body.success).to.eql(true);
-                chai.expect(res.body.data).instanceOf(Array);
-                chai.expect(res.body.data).contains(GLOBAL.FILE_MANIFEST_ID);
+                chai.expect(res.body.data).haveOwnProperty("hash");
+                chai.expect(res.body.data).haveOwnProperty("uris");
+                chai.expect(res.body.data.hash).eq(GLOBAL.FILE_MANIFEST_HASH);
+                chai.expect(res.body.data.uris).contains(GLOBAL.FILE_MANIFEST_ID);
                 done();
             })
             .catch(done);
@@ -257,6 +295,22 @@ export function registryCreationDeletion() {
                 chai.expect(res.body.success).to.eql(true);
                 chai.expect(res.body.data).instanceOf(Array);
                 chai.expect(res.body.data).length(0);
+                done();
+            })
+            .catch(done);
+    });
+
+    it("should remove hash uri from registry", function (done) {
+        chai.request(app)
+            .post(`/${GLOBAL.ACCOUNT_NAME}/registry/remove-hash-uri`)
+            .query({
+                key: GLOBAL.ACCOUNT_KEY,
+                hash: GLOBAL.FILE_MANIFEST_HASH,
+                uri: GLOBAL.FILE_MANIFEST_ID
+            })
+            .then(res => {
+                chai.assert.equal(res.status, 200);
+                chai.expect(res.body.success).to.eql(true);
                 done();
             })
             .catch(done);
