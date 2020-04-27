@@ -66,7 +66,7 @@ export const addModuleWithObjects = asyncHandler(async function (req: any, res: 
     if (!version) throw new Error("version is required parameter.");
     if (!hashUris) throw new Error("hashUris is required parameter.");
 
-    await RegistryService.addModuleWithObjects(account, name, branch, version, hashUris);
+    await RegistryService.addModuleWithObjects(account, name, branch, version, JSON.parse(hashUris));
 
     res.json({ success: true, message: "The module is added to registry." });
 })
