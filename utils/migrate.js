@@ -29,7 +29,16 @@ async function start() {
             for (const version in data.modules[name][branch]) {
                 const uris = data.modules[name][branch][version];
                 const files = await Promise.all(uris.map(u => getFile(u)));
-                const hashes = files.map(f => ethers.utils.keccak256(new Uint8Array(f)).substring(2));
+
+                const manifestStrings = files.map(f => new TextDecoder('utf-8').decode(f));
+                const manifests = manifestStrings.map(s => JSON.parse(s));
+
+                console.log(manifests);
+
+                const distFiles = await Promise.all(manifests.map(m => getFile(m.dist)));
+
+
+                const hashes = distFiles.map(f => ethers.utils.keccak256(new Uint8Array(f)).substring(2));
                 console.log(hashes);
             }
         }

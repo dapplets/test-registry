@@ -59,8 +59,11 @@ export async function addModule(account: string, name: string, branch: string, v
 
     if (!config.modules[name][branch][version]) {
         config.modules[name][branch][version] = manifestHash;
+    } else if (config.modules[name][branch][version] === manifestHash) {
+        return
     } else {
-        throw new Error(`Module "${name}#${branch}@${version}" already exists in the Registry.`);
+        const anotherHash = config.modules[name][branch][version];
+        throw new Error(`Module "${name}#${branch}@${version}" already exists in the Registry and has another manifest hash: ${anotherHash}.`);
     }
 
     saveAccountConfig(account, config);
@@ -144,7 +147,7 @@ export function addHashUri(account: string, hash: string, uri: string) {
     if (!config.hashUris[hash]) config.hashUris[hash] = [];
 
     if (config.hashUris[hash].indexOf(uri) !== -1) {
-        throw new Error(`This URI already exists in this hash.`);
+        return;
     } else {
         config.hashUris[hash].push(uri);
     }
