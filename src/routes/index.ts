@@ -1,10 +1,10 @@
 import { Router } from "express";
 import * as home from "../controllers/home";
-import * as accounts from "../controllers/accounts";
-import * as registry from "../controllers/registry";
-import * as storage from "../controllers/storage";
 import * as awsStorage from "../controllers/awsStorage";
 import multer from "multer";
+// import * as accounts from "../controllers/accounts";
+// import * as registry from "../controllers/registry";
+// import * as storage from "../controllers/storage";
 
 const upload = multer();
 const router = Router();
@@ -31,8 +31,8 @@ router.get('/', home.index);
 // router.post('/:account/storage/', upload.single('file'), storage.post);
 // router.delete('/:account/storage/:id', storage.del);
 
-router.get('/storage/:id', storage.getById);
-router.post('/storage', upload.single('file'), storage.post);
+router.get('/storage/:id', awsStorage.getById);
+router.post('/storage', upload.single('file'), awsStorage.post);
 
 
 export default router;

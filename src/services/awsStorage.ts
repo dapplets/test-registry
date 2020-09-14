@@ -1,17 +1,14 @@
 import { DATA_STORAGE_PATH } from "../common/constants";
 import * as ethers from "ethers";
-import Minio from 'minio';
-import streamToBuffer from 'stream-to-buffer';
+import * as Minio from 'minio';
+import Stream from 'stream';
 
-export async function getFile(hash: string): Promise<ArrayBuffer> {
+export async function getFile(hash: string): Promise<Stream.Readable> {
     const client = _getAwsClient();
-    // const { metaData } = await client.statObject(process.env.SCALEWAY_BUCKET_NAME as string, hash);
-    const dataStream = await client.getObject(process.env.SCALEWAY_BUCKET_NAME as string, hash);
-    const buffer: Buffer = await new Promise((res, rej) => streamToBuffer(dataStream, (err: any, result: any) => err ? rej(err) : res(result)));
-    return buffer.buffer;
+    return client.getObject(process.env.SCALEWAY_BUCKET_NAME as string, hash);
 }
 
-export async function saveFile(buf: ArrayBuffer): Promise<string> {
+export async function saveFile(buf: Buffer): Promise<string> {
     const arr = new Uint8Array(buf);
     const hash = ethers.utils.keccak256(arr).replace('0x', '');
     const client = _getAwsClient();
