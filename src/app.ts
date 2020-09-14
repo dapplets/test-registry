@@ -26,7 +26,7 @@ app.use((err: any, req: any, res: any, next: any) => {
     const status = (err.name == "AuthError") ? 401 : 400;
     res.status(status).json({
         success: false,
-        message: err.message
+        message: err.message ? err.message : err
     });
 });
 
