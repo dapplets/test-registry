@@ -10,6 +10,6 @@ const router = Router();
 router.get('/', home.index);
 router.get('/storage/:id', awsStorage.getById);
 router.post('/storage', upload.single('file'), awsStorage.post);
-router.get('/s3/:id', s3.post);
+router.post('/s3/presign', s3.post);
 
 export default router;
