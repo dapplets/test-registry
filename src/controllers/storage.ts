@@ -1,10 +1,11 @@
-import { getFile, saveFile, deleteFile } from "../services/storage";
+import { getFile, saveFile } from "../services/s3";
 import { asyncHandler } from "../common/helpers";
 
 export const getById = asyncHandler(async function (req: any, res: any) {
     const { id } = req.params;
-    const buf = await getFile(id);
-    return res.end(buf, 'binary');
+    const stream = await getFile(id);
+    stream.on('data', (data) => res.write(data));
+    stream.on('end', () => res.status(200).send());
 })
 
 export const post = asyncHandler(async function (req: any, res: any) {
@@ -12,10 +13,4 @@ export const post = asyncHandler(async function (req: any, res: any) {
     if (!file) return res.json({ success: false, message: "A file is not attached." });
     const id = await saveFile(file.buffer);
     return res.json({ success: true, data: id });
-})
-
-export const del = asyncHandler(async function (req: any, res: any) {
-    const { id } = req.params;
-    await deleteFile(id);
-    return res.json({ success: true, message: "The file was deleted." });
 })
