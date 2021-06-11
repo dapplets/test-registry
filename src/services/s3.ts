@@ -20,7 +20,7 @@ export async function createPresignedPost(id: string) {
 
     const x = client.listObjects(process.env.SCALEWAY_BUCKET_NAME as string, id);
     const isExists = await new Promise((res, rej) => {
-        x.on('error', rej);
+        x.on('error', () => res(false));
         x.on('data', () => res(true));
         x.on('end', () => res(false));
     })
