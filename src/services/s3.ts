@@ -4,14 +4,16 @@ import Stream from 'stream';
 
 export async function getFile(hash: string): Promise<Stream.Readable> {
     const client = _getAwsClient();
-    return client.getObject(process.env.SCALEWAY_BUCKET_NAME as string, hash);
+    const bucketName = process.env.SCALEWAY_BUCKET_NAME as string;
+    return client.getObject(bucketName, bucketName + '/' + hash);
 }
 
 export async function saveFile(buf: Buffer): Promise<string> {
     const arr = new Uint8Array(buf);
     const hash = ethers.utils.keccak256(arr).replace('0x', '');
     const client = _getAwsClient();
-    await client.putObject(process.env.SCALEWAY_BUCKET_NAME as string, hash, Buffer.from(buf), { 'Content-Type': 'application/octet-stream' });
+    const bucketName = process.env.SCALEWAY_BUCKET_NAME as string;
+    await client.putObject(bucketName, bucketName + '/' + hash, Buffer.from(buf), { 'Content-Type': 'application/octet-stream' });
     return hash;
 }
 
