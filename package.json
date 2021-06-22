@@ -26,6 +26,7 @@
   "homepage": "https://github.com/dapplets/dapplet-registry#readme",
   "dependencies": {
     "cors": "^2.8.5",
+    "discord.js": "^12.5.3",
     "ethers": "^5.0.13",
     "express": "^4.17.1",
     "minio": "^7.0.16",
