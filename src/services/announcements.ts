@@ -6,9 +6,11 @@ export async function getAnnouncements() {
     const channel = await client.channels.fetch(process.env.DISCORD_CHANNEL_ID as string) as any;
     const rawMessages = await channel.messages.fetch({ limit: 10 }) as any[];
     
-    const messages = rawMessages.map(({ id, content, createdTimestamp }) => ({
-        content, 
-        timestamp: new Date(createdTimestamp).toISOString()
+    const messages = rawMessages.map((x) => ({
+        authorUsername: x.author.username,
+        content: x.content, 
+        timestamp: new Date(x.createdTimestamp).toISOString(),
+        link: `https://discord.com/channels/${x.channel.guild.id}/${x.channel.id}/${x.id}`
     }));
 
     return messages;
