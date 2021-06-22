@@ -5,7 +5,8 @@
         "outDir": "./build",
         "strict": true,
         "esModuleInterop": true,
-        "typeRoots": ["./node_modules/@types", "./typings"]
+        "typeRoots": ["./node_modules/@types", "./typings"],
+        "skipLibCheck": true
     },
     "include": ["./src/**/*.ts", "./typings"],
     "exclude": ["node_modules", "**/*.spec.ts"]
