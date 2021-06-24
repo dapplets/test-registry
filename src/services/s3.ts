@@ -25,6 +25,8 @@ export async function createPresignedPost(id: string) {
         x.on('error', () => res(false));
         x.on('data', () => res(true));
         x.on('end', () => res(false));
+        x.on('error', () => rej("Error of S3 communication")),
+        x.on('close', () => res(true))
     })
 
     if (isExists) throw Error('Item with such ID already exists');
