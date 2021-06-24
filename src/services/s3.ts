@@ -19,18 +19,6 @@ export async function saveFile(buf: Buffer): Promise<string> {
 
 export async function createPresignedPost(id: string) {
     const client = _getAwsClient();
-
-    const x = client.listObjects(process.env.SCALEWAY_BUCKET_NAME as string, id);
-    const isExists = await new Promise((res, rej) => {
-        x.on('error', () => res(false));
-        x.on('data', () => res(true));
-        x.on('end', () => res(false));
-        x.on('error', () => rej("Error of S3 communication")),
-        x.on('close', () => res(true))
-    })
-
-    if (isExists) throw Error('Item with such ID already exists');
-
     const policy = client.newPostPolicy();
     policy.setBucket(process.env.SCALEWAY_BUCKET_NAME as string);
     policy.setKeyStartsWith(id);
