@@ -7,10 +7,9 @@ export async function getAnnouncements() {
     const rawMessages = await channel.messages.fetch({ limit: 12 }) as any[];
 
     const messages = rawMessages
-        .filter(x => x.content.indexOf('ALERT') === 0)
         .map((x) => ({
             authorUsername: x.author.username,
-            content: x.content.replace('ALERT', '').trim(),
+            content: x.content,
             timestamp: new Date(x.createdTimestamp).toISOString(),
             link: `https://discord.com/channels/${x.channel.guild.id}/${x.channel.id}/${x.id}`
         }));
