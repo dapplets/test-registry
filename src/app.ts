@@ -1,8 +1,12 @@
 import express, { NextFunction, Request, Response } from "express";
 import routes from "./routes";
 import cors from "cors";
+import NodeCache from "node-cache";
 
-var app = express();
+const app = express();
+
+const cache = new NodeCache({ stdTTL: 300 }); // 5 minutes cache
+app.set('cache', cache); 
 
 app.use(cors());
 app.use(express.json());
@@ -22,6 +26,6 @@ app.use((req, res) => {
         success: false,
         message: "Not found"
     });
-})
+});
 
 export { app }
